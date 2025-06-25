@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<clientes>
+    
+<autor idCliente="001">
+    001<nombre>Camila</nombre>
+    <telefono>86621670</telefono>
+    <celular>85961620</celular>
+    <direccion>85961620</direccion>
+</autor>
+<autor idCliente="002">002<nombre>Ana</nombre>
+    <telefono>87821670</telefono>
+    <celular>85961621</celular>
+    <direccion>85961621</direccion>
+</autor>
+<autor idCliente="003">003<nombre>Mateo</nombre>
+    <telefono>89991670</telefono>
+    <celular>85961622</celular>
+    <direccion>85961622</direccion>
+</autor>
+<autor idCliente="004">004<nombre>María</nombre>
+    <telefono>81231670</telefono>
+    <celular>85961623</celular>
+    <direccion>85961623</direccion>
+</autor>
+<autor idCliente="005">005<nombre>Carlos</nombre>
+    <telefono>83451670</telefono>
+    <celular>85961624</celular>
+    <direccion>85961624</direccion>
+</autor>
+<autor idCliente="006">006<nombre>Daniela</nombre>
+    <telefono>85671670</telefono>
+    <celular>85961625</celular>
+    <direccion>85961625</direccion>
+</autor>
+<autor idCliente="007">007<nombre>José</nombre>
+    <telefono>87781670</telefono>
+    <celular>85961626</celular>
+    <direccion>85961626</direccion>
+</autor>
+<autor idCliente="008">008<nombre>Sofía</nombre>
+    <telefono>88891670</telefono>
+    <celular>85961627</celular>
+    <direccion>85961627</direccion>
+</autor>
+<autor idCliente="009">009<nombre>Esteban</nombre>
+    <telefono>81101670</telefono>
+    <celular>85961628</celular>
+    <direccion>85961628</direccion>
+</autor>
+<autor idCliente="010">010<nombre>Valeria</nombre>
+    <telefono>82211670</telefono>
+    <celular>85961629</celular>
+    <direccion>85961629</direccion>
+</autor>
+</clientes>
