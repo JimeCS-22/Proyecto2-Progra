@@ -9,7 +9,7 @@ package cr.ac.ucr.paraiso.proyecto2.progra.domain;
  *
  * @author fabia
  */
-class Servicio {
+public class Servicio {
     
     
     private String descripcion;

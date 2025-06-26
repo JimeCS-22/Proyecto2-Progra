@@ -4,6 +4,8 @@
  */
 package cr.ac.ucr.paraiso.proyecto2.progra.domain;
 
+import java.util.List;
+
 /**
  *
  * @author Camila
@@ -17,13 +19,13 @@ public class DetalleOrdenTrabajo {
     private String tipoDetalle;
     private String estado;
     
-     private Servicio servicio;
-    private Repuesto repuesto;
+    private List<Servicio> servicio;
+    private List<Repuesto> repuesto;
 
     public DetalleOrdenTrabajo() {
     }
 
-    public DetalleOrdenTrabajo(String idDetalle, int cantidad, String observaciones, String tipoDetalle, String estado, Servicio servicio, Repuesto repuesto) {
+    public DetalleOrdenTrabajo(String idDetalle, int cantidad, String observaciones, String tipoDetalle, String estado, List<Servicio> servicio, List<Repuesto> repuesto) {
         this.idDetalle = idDetalle;
         this.cantidad = cantidad;
         this.observaciones = observaciones;
@@ -73,19 +75,19 @@ public class DetalleOrdenTrabajo {
         this.estado = estado;
     }
 
-    public Servicio getServicio() {
+    public List<Servicio> getServicio() {
         return servicio;
     }
 
-    public void setServicio(Servicio servicio) {
+    public void setServicio(List<Servicio> servicio) {
         this.servicio = servicio;
     }
 
-    public Repuesto getRepuesto() {
+    public List<Repuesto> getRepuesto() {
         return repuesto;
     }
 
-    public void setRepuesto(Repuesto repuesto) {
+    public void setRepuesto(List<Repuesto> repuesto) {
         this.repuesto = repuesto;
     }
     
