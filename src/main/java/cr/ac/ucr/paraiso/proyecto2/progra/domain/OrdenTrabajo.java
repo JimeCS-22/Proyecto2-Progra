@@ -48,7 +48,7 @@ public class OrdenTrabajo {
                 total += s.getPrecio() + s.getCostoManoObra();
             } else if (detalle.getRepuesto() != null) {
                 Repuesto r = detalle.getRepuesto();
-                total += r.getPrecio() * detalle.getCantidad();
+                //total += r.getPrecio() * detalle.getCantidad();
             }
         }
     }
