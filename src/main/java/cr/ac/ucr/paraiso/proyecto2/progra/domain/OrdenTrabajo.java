@@ -44,10 +44,10 @@ public class OrdenTrabajo {
     if (detalles != null) {
         for (DetalleOrdenTrabajo detalle : detalles) {
             if (detalle.getServicio() != null) {
-                Servicio s = detalle.getServicio();
+                Servicio s = detalle.getServicio().get(0); //TODO CORREGIR PORQUE SE USAN LISTAS DE AMBOS-REV O PONER UN i
                 total += s.getPrecio() + s.getCostoManoObra();
             } else if (detalle.getRepuesto() != null) {
-                Repuesto r = detalle.getRepuesto();
+                Repuesto r = detalle.getRepuesto().get(0);
                 //total += r.getPrecio() * detalle.getCantidad();
             }
         }
