@@ -16,15 +16,23 @@ public class DetalleOrdenTrabajo {
     private String observaciones;
     private String tipoDetalle;
     private String estado;
+    
+     private Servicio servicio;
+    private Repuesto repuesto;
 
-    public DetalleOrdenTrabajo(String idDetalle, int cantidad, String observaciones, String tipoDetalle, String estado) {
+    public DetalleOrdenTrabajo() {
+    }
+
+    public DetalleOrdenTrabajo(String idDetalle, int cantidad, String observaciones, String tipoDetalle, String estado, Servicio servicio, Repuesto repuesto) {
         this.idDetalle = idDetalle;
         this.cantidad = cantidad;
         this.observaciones = observaciones;
         this.tipoDetalle = tipoDetalle;
         this.estado = estado;
+        this.servicio = servicio;
+        this.repuesto = repuesto;
     }
-
+    
     public String getIdDetalle() {
         return idDetalle;
     }
@@ -64,6 +72,23 @@ public class DetalleOrdenTrabajo {
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
+    public Servicio getServicio() {
+        return servicio;
+    }
+
+    public void setServicio(Servicio servicio) {
+        this.servicio = servicio;
+    }
+
+    public Repuesto getRepuesto() {
+        return repuesto;
+    }
+
+    public void setRepuesto(Repuesto repuesto) {
+        this.repuesto = repuesto;
+    }
+    
     
     
     
