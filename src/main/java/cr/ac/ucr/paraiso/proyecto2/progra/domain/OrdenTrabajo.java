@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.ucr.paraiso.proyecto2.progra.domain;
 
 import java.time.LocalDate;
@@ -11,18 +7,19 @@ import java.util.List;
 /**
  *
  * @author fabia
+ * Orden de Trabajo
  */
 public class OrdenTrabajo {
-    
+
     private String id;
     private String descripcionSolicitud;
     private String estado;
     private Date fechaIngreso;
     private Date fechaDevolucionEstimada;
-    
-    //Se llaman a las otras claases 
+
+    // Se llaman a las otras clases
     private List<DetalleOrdenTrabajo> detalles;
-    private Vehiculos vehiculo;// Ya contiene al cliente
+    private Vehiculos vehiculo; // Ya contiene al cliente
 
     public OrdenTrabajo() {
     }
@@ -37,67 +34,100 @@ public class OrdenTrabajo {
         this.vehiculo = vehiculo;
     }
 
-    //Suma el costo total de todos los servicios y repuestos
-    public double calcularCostos(){
-     double total = 0.0;
+    /**
+     * Suma el costo total de todos los servicios y repuestos asociados a esta orden de trabajo.
+     */
+    public double calcularCostos() {
+        double total = 0.0;
 
-    if (detalles != null) {
-        for (DetalleOrdenTrabajo detalle : detalles) {
-            if (detalle.getServicio() != null) {
-                Servicio s = detalle.getServicio().get(0); //TODO CORREGIR PORQUE SE USAN LISTAS DE AMBOS-REV O PONER UN i
-                total += s.getPrecio() + s.getCostoManoObra();
-            } else if (detalle.getRepuesto() != null) {
-                Repuesto r = detalle.getRepuesto().get(0);
-                //total += r.getPrecio() * detalle.getCantidad();
+        if (detalles != null) {
+            for (DetalleOrdenTrabajo detalle : detalles) {
+
+                // Si este detalle contiene servicios, los sumamos.
+                if (detalle.getServicio() != null) {
+                    for (Servicio s : detalle.getServicio()) {
+                        total += s.getPrecio() + s.getCostoManoObra();
+                    }
+                }
+
+                // Si este detalle contiene repuestos, los sumamos.
+                if (detalle.getRepuesto() != null) {
+                    for (Repuesto r : detalle.getRepuesto()) {
+                        // Multiplicamos el precio del repuesto por la cantidad especificada en el detalle.
+                        // Esto asume que la 'cantidad' en DetalleOrdenTrabajo se aplica a cada repuesto
+                        // en la lista de 'repuesto' de ese detalle, o que solo habrá un repuesto
+                        // en esa lista.
+                        total += r.getPrecio() * detalle.getCantidad();
+                    }
+                }
             }
         }
+
+        return total;
     }
 
-    return total;
+    // Setters y getters
+    public String getId() {
+        return id;
     }
-    
-    
-    //Setters y getters
-    public String getId() {return id;}
 
-    public void setId(String id) {this.id = id;}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    public String getDescripcionSolicitud() {return descripcionSolicitud;}
+    public String getDescripcionSolicitud() {
+        return descripcionSolicitud;
+    }
 
-    public void setDescripcionSolicitud(String descripcionSolicitud) {this.descripcionSolicitud = descripcionSolicitud;}
+    public void setDescripcionSolicitud(String descripcionSolicitud) {
+        this.descripcionSolicitud = descripcionSolicitud;
+    }
 
-    public String getEstado() {return estado;}
+    public String getEstado() {
+        return estado;
+    }
 
-    public void setEstado(String estado) {this.estado = estado;}
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
 
-    public Date getFechaIngreso() {return fechaIngreso;}
+    public Date getFechaIngreso() {
+        return fechaIngreso;
+    }
 
-    public void setFechaIngreso(Date fechaIngreso) {this.fechaIngreso = fechaIngreso;}
+    public void setFechaIngreso(Date fechaIngreso) {
+        this.fechaIngreso = fechaIngreso;
+    }
 
-    public Date getFechaDevolucionEstimada() {return fechaDevolucionEstimada;}
+    public Date getFechaDevolucionEstimada() {
+        return fechaDevolucionEstimada;
+    }
 
-    public void setFechaDevolucionEstimada(Date fechaDevolucionEstimada) {this.fechaDevolucionEstimada = fechaDevolucionEstimada;}
+    public void setFechaDevolucionEstimada(Date fechaDevolucionEstimada) {
+        this.fechaDevolucionEstimada = fechaDevolucionEstimada;
+    }
 
-    public List<DetalleOrdenTrabajo> getDetalles() {return detalles;}
+    public List<DetalleOrdenTrabajo> getDetalles() {
+        return detalles;
+    }
 
-    public void setDetalles(List<DetalleOrdenTrabajo> detalles) {this.detalles = detalles;}
+    public void setDetalles(List<DetalleOrdenTrabajo> detalles) {
+        this.detalles = detalles;
+    }
 
-    public Vehiculos getVehiculo() {return vehiculo;}
+    public Vehiculos getVehiculo() {
+        return vehiculo;
+    }
 
-    public void setVehiculo(Vehiculos vehiculo) {this.vehiculo = vehiculo;}
+    public void setVehiculo(Vehiculos vehiculo) {
+        this.vehiculo = vehiculo;
+    }
 
-    //
     @Override
     public String toString() {
-        return "OrdenTrabajo{" + "id=" + id + ", descripcionSolicitud=" + descripcionSolicitud + 
-                ", estado=" + estado + ", fechaIngreso=" + fechaIngreso + 
-                ", fechaDevolucionEstimada=" + fechaDevolucionEstimada + 
+        return "OrdenTrabajo{" + "id=" + id + ", descripcionSolicitud=" + descripcionSolicitud +
+                ", estado=" + estado + ", fechaIngreso=" + fechaIngreso +
+                ", fechaDevolucionEstimada=" + fechaDevolucionEstimada +
                 ", detalles=" + detalles + ", vehiculo=" + vehiculo + '}';
     }
-    
-    
-    
-    
-    
-    
 }
