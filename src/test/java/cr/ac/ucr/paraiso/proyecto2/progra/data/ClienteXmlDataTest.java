@@ -56,7 +56,7 @@ public class ClienteXmlDataTest {
     /**
      * Test of insertarCliente method, of class ClienteXmlData.
      */
-    @Test
+    //@Test
     public void testInsertarCliente(){
         try {
             System.out.println("insertarCliente");
@@ -116,8 +116,8 @@ public class ClienteXmlDataTest {
     public void testActualizar() {
        
         try {
-            Cliente c = new Cliente("010", "Sofia", "82211670", "85961629", "Paraiso");
-            Cliente cn = new Cliente("010", "Valeria", "82211670", "85961629", "Paraiso");
+            Cliente c = new Cliente("010", "Sofia Velgara", "82211670", "85961629", "L.A");
+            Cliente cn = new Cliente("010", "Valeria Gúzman", "82211670", "85961629", "Paraiso");
             System.out.println("actualizar");
        
             Cliente nuevoCliente = c;

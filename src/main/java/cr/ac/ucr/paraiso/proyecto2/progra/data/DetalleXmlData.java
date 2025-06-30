@@ -101,18 +101,47 @@ public class DetalleXmlData {
         eStatus.addContent(detalle.getEstado());
         
       Element eServicio = new Element("servicios");
-       for (Servicio s : detalle.getServicio()) {
-            Element eS = new Element("servicio");
-            eS.addContent(s.getDescripcion()); // ajustá según tus atributos
+      Element eS = new Element("servicio");
+      if(detalle.getServicio() != null){
+       for (Servicio s : detalle.getServicio()) {   
+            Element eDescrip = new Element("descripcion");
+            eDescrip.addContent(s.getDescripcion()); 
+             Element ePrecio = new Element("precio");
+            ePrecio.addContent(String.valueOf(s.getPrecio()));
+             Element eCosto = new Element("costoManoObra");
+            eCosto.addContent(String.valueOf(s.getCostoManoObra()));
             eServicio.addContent(eS);
+            eServicio.addContent(eDescrip);
+            eServicio.addContent(ePrecio);
+            eServicio.addContent(eCosto);
         }
-
+       }else{
+          System.out.println("No tiene servicio asociado");
+           eS.addContent("null"); //colocar null en el file
+      }
+    
         Element eRepuesto = new Element("repuestos");
-        for (Repuesto r : detalle.getRepuesto()) {
-            Element eR = new Element("repuesto");
-            eR.addContent(r.getNombreRepuesto()); // ajustá según tus atributos
-            eRepuesto.addContent(eR);
-        }
+        Element eR = new Element("repuesto");
+        if(detalle.getRepuesto() != null){
+            for (Repuesto r : detalle.getRepuesto()) {
+                eR.addContent(r.getNombreRepuesto());
+                 Element eCant = new Element("Cantidad");
+                eCant.addContent(String.valueOf(r.getCantidad()));
+                 Element ePrecio= new Element("Precio");
+                ePrecio.addContent(String.valueOf(r.getPrecio()));
+                 Element eFuePedido = new Element("fuePedido");
+                eFuePedido.addContent(String.valueOf(r.isFuePedido()));
+                eRepuesto.addContent(eR);
+                eServicio.addContent(eCant);
+                eServicio.addContent(ePrecio);
+                eServicio.addContent(eFuePedido);
+            }
+        }else{
+        System.out.println("Detalle no tiene repuesto asociado");
+           eR.addContent("null"); //colocar null en el file
+       }
+              
+           
         eDetalle.setAttribute("idDetalle",String.valueOf(detalle.getIdDetalle()));
         eDetalle.addContent(eCantidad);
         eDetalle.addContent(eObservaciones);

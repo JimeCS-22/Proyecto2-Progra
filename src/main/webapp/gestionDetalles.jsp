@@ -57,7 +57,7 @@
 
     <h2>Ingreso Detalle Orden</h2>
 
-    <div class="toggle-group">
+    <div class="toggle-group" style="display: flex; align-items: center; gap: 3px;">
         <label>Tipo detalle:</label>
         <div class="radio-group">
             <input type="radio" id="servicios" name="tipoDetalle" value="Servicios" checked>
@@ -72,9 +72,7 @@
     <div id="seccionRepuesto">
         <div class="form-group">
             <label for="nombreRepuesto">Nombre Repuesto:</label>
-            <select id="nombreRepuesto">
-                <option>Select</option>
-            </select>
+             <input id="nombreRepuesto" placeholder="Ex: Llantas">
         </div>
 
         <div class="form-group">
@@ -87,32 +85,30 @@
             <input type="text" id="precioRepuesto">
         </div>
 
-        <div class="form-group">
-            <label>¿Fue pedido?</label>
-            <div class="radio-group">
-                <input type="radio" id="pedidoSi" name="pedido" value="Si" checked>
-                <label for="pedidoSi">Sí</label>
+        <div class="form-group" style="display: flex; align-items: center; gap: 5px;">
+    <label style="margin-right: 10px;">¿Fue pedido?</label>
+    <div class="radio-group" style="display: flex; gap: 1px; align-items: center;">
+        
+        <input type="radio" id="pedidoSi" name="pedido" value="Si" checked>
+        <label for="pedidoSi" style="margin-right: 1px;">Sí</label>
+        <br>
+        <input type="radio" id="pedidoNo" name="pedido" value="No">
+        <label for="pedidoNo">No</label>
 
-                <input type="radio" id="pedidoNo" name="pedido" value="No">
-                <label for="pedidoNo">No</label>
-            </div>
-        </div>
+    </div>
+</div>
     </div>
 
     <!-- Servicios -->
     <div id="seccionServicio">
         <div class="form-group">
             <label for="servicioRequerido">Servicio requerido:</label>
-            <select id="servicioRequerido">
-                <option>Select</option>
-            </select>
+             <input type="text" id="servicioRequerido">
         </div>
 
         <div class="form-group">
             <label for="precioServicio">Precio:</label>
-            <select id="precioServicio">
-                <option>Select</option>
-            </select>
+             <input type="text" id="precioServicio">
         </div>
 
         <div class="form-group">
@@ -120,11 +116,11 @@
             <input type="text" id="costoManoObra">
         </div>
     </div>
-
+<form action="${pageContext.request.contextPath}/InsertarDetallesServlet" method="post">
     <div class="button-container">
-        <button>Guardar</button>
+        <button type="submit">Guardar</button>
     </div>
-
+</form>
     <script>
         const radioServicios = document.getElementById("servicios");
         const radioRepuestos = document.getElementById("repuestos");

@@ -13,6 +13,10 @@
         <servlet-name>InsertarCliente</servlet-name>
         <servlet-class>cr.ac.ucr.paraiso.proyecto2.progra.servlets.InsertarClienteServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>InsertarDetallesServlet</servlet-name>
+        <servlet-class>cr.ac.ucr.paraiso.proyecto2.progra.servlets.InsertarDetallesServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/faces/*</url-pattern>
@@ -21,12 +25,16 @@
         <servlet-name>InsertarCliente</servlet-name>
         <url-pattern>/InsertarCliente</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>InsertarDetallesServlet</servlet-name>
+        <url-pattern>/InsertarDetallesServlet</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>faces/index.xhtml</welcome-file>
+        <welcome-file>faces/index.html</welcome-file>
     </welcome-file-list>
 </web-app>

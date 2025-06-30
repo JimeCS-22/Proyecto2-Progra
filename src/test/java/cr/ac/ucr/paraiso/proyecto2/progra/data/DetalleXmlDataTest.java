@@ -64,24 +64,24 @@ public class DetalleXmlDataTest {
     /**
      * Test of insertarDetalle method, of class DetalleXmlData.
      */
-   /* @Test
+   @Test
     public void testInsertarDetalle() throws Exception {
         System.out.println("Insertar Detalle Test");
 
         detalles = new ArrayList<DetalleOrdenTrabajo>();
         //config serv
         servicios = new ArrayList<Servicio>();
-        servicios.add(new Servicio("Cambiar llantas",12000.00,5000.0));
+        servicios.add(new Servicio("Cambiar puertas",12000.00,5000.0));
         //config repuestos
         repuestos = new ArrayList<Repuesto>();
-        repuestos.add(new Repuesto(3,"Manguera",25000.00,true));
+        repuestos.add(new Repuesto(4,"Pintura Lanco ",25000.00,true));
         System.out.println(repuestos);
-        DetalleOrdenTrabajo detalle = new DetalleOrdenTrabajo("01",1, "Se utilizaron 3","Repuesto","En proceso",servicios, repuestos);
+        DetalleOrdenTrabajo detalle = new DetalleOrdenTrabajo("03",1, "Se utilizaron 2 baldes","Repuesto","Completado",servicios, repuestos);
         DetalleXmlData instance = new DetalleXmlData(realPath);
         instance.insertarDetalle(detalle);
         detalles.add(detalle);//add to list to find all
         System.out.println("Se insertó: "+ detalle);
-    }*/
+    }
 
     /**
      * Test of findAll method, of class DetalleXmlData.
@@ -93,17 +93,13 @@ public class DetalleXmlDataTest {
             System.out.println("Find All Detalles");
             detalles = new ArrayList<DetalleOrdenTrabajo>();
             DetalleXmlData instance = new DetalleXmlData(realPath);
-            instance.clear();
-            DetalleOrdenTrabajo detalle = new DetalleOrdenTrabajo("02",5, "Se utilizaron 4","Repuesto","Completado",null, repuestos);
-            detalles.add(detalle);//add to list
             List<DetalleOrdenTrabajo> expResult = detalles;
-            instance.insertarDetalle(detalle);
-            
-        
+ 
             List<DetalleOrdenTrabajo> result = instance.findAll();
             System.out.println(result);
-            //assertEquals(expResult, result);
-            //assertEquals(2, result.size()); compara si el tamaño es igual
+            assertEquals(expResult, result);
+            //otras pruebas:
+            //assertEquals(1, result.size()); compara si el tamaño es igual
             //assertEquals(detalle.getIdDetalle(), result.get(0).getIdDetalle());
             
         } catch (JDOMException ex) {
@@ -113,9 +109,4 @@ public class DetalleXmlDataTest {
         }
         
     }
-    
-    
-    //Si no se quiere comparar listas enteras, podés validar los tamaños o los campos clave:
-//assertEquals(1, result.size());
-//assertEquals(detalle.getIdDetalle(), result.get(0).getIdDetalle());
 }

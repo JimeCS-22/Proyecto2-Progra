@@ -84,6 +84,6 @@
     </div>
 
     <a href="<%= request.getContextPath() %>/InsertarVehiculoServlet" class="action-link">Registrar Nuevo Vehículo</a>
-    <a href="<%= request.getContextPath() %>/index.jsp" class="action-link">Volver al Menú Principal</a>
+    <a href="<%= request.getContextPath() %>/index.html" class="action-link">Volver al Menú Principal</a>
 </body>
 </html>

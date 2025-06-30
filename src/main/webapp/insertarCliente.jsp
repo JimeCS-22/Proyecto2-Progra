@@ -57,8 +57,9 @@
         <input id="direccion" name="direccion" type="text" required>
     </div>
   <button type="submit">Insertar</button>
-
+  <button type="submit">Actualizar</button>
   </form>
+  
 
   <h2>Registro Clientes</h2>
     <form action="InsertarClienteServlet" method="get">

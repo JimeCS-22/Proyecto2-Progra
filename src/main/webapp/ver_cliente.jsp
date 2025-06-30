@@ -26,7 +26,7 @@
         Dirección: <%= direccion %><br>
         
        <form action="pagina.html">
-    <button type="submit" onclick="window.location.href='insertar_cliente.jsp'" >Regresar</button>
+    <button type="submit" onclick="window.location.href='insertarCliente.jsp'" >Regresar</button>
 </form>
     </body>
 </html>

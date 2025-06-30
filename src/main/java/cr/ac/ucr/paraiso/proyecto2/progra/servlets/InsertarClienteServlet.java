@@ -13,9 +13,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 //import javax.servlet.ServletContext;
 import org.jdom2.JDOMException;
 
@@ -29,19 +32,32 @@ public class InsertarClienteServlet extends HttpServlet {
 
      @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)throws ServletException, IOException {
-        Cliente cliente = new Cliente();
-        cliente.setIdCliente(req.getParameter("idCliente"));
-        cliente.setNombre(req.getParameter("nombre"));
-        cliente.setTelefono(req.getParameter("telefono"));
-        cliente.setCelular(req.getParameter("celular"));
-        cliente.setDireccion(req.getParameter("direccion"));
-     
-        
-        // deberiamos enviar el empleado para insertar a la b.d.
-        clientes.add(cliente);
-        req.getRequestDispatcher("/ver_cliente.jsp?idCliente="+cliente.getIdCliente() +
-                "&nombre="+cliente.getNombre() + "&telefono=" + cliente.getTelefono() +"&celular="+ 
-                cliente.getCelular() + "&direccion=" + cliente.getDireccion()).forward(req, resp);
+       try {
+           Cliente cliente = new Cliente();
+           cliente.setIdCliente(req.getParameter("idCliente"));
+           cliente.setNombre(req.getParameter("nombre"));
+           cliente.setTelefono(req.getParameter("telefono"));
+           cliente.setCelular(req.getParameter("celular"));
+           cliente.setDireccion(req.getParameter("direccion"));
+           
+           //colocar la ruta valida donde esta el xml
+           String baseWebapp = "src/main/webapp";
+           String rutaDocumento = "/WEB-INF/archivos/clientes.xml";
+           File f = new File(baseWebapp + rutaDocumento);
+           
+           String realPath = f.getAbsolutePath();
+           
+           // enviar el empleado para insertar al 
+           ClienteXmlData data = new ClienteXmlData(realPath);
+           data.insertarCliente(cliente);
+           clientes.add(cliente);
+           req.getRequestDispatcher("/ver_cliente.jsp?idCliente="+cliente.getIdCliente() +
+                   "&nombre="+cliente.getNombre() + "&telefono=" + cliente.getTelefono() +"&celular="+
+                   cliente.getCelular() + "&direccion=" + cliente.getDireccion()).forward(req, resp);
+           
+       } catch (JDOMException ex) {
+           Logger.getLogger(InsertarClienteServlet.class.getName()).log(Level.SEVERE, null, ex);
+       }
     }
    
 @Override
