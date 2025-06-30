@@ -90,9 +90,9 @@ public class DetalleXmlData {
         Element eStatus = new Element("estado");
         eStatus.addContent(detalle.getEstado());
         
-        Element eServicio = new Element("servicio");
+        Element eServicio = new Element("servicios");
         eServicio.addContent(String.valueOf(detalle.getServicio()));
-        Element eRepuesto = new Element("estado");
+        Element eRepuesto = new Element("repuestos");
         eRepuesto.addContent(String.valueOf(detalle.getRepuesto()));
         
         eDetalle.setAttribute("idDetalle",String.valueOf(detalle.getIdDetalle()));
@@ -108,68 +108,64 @@ public class DetalleXmlData {
     }//insertar
 
     //para recorrer el archivo y retornar todos los clientes
-    public List<DetalleOrdenTrabajo> findAll(){
-        List<DetalleOrdenTrabajo> detalles = new ArrayList<>();
-        List<Element> eListaDetalles = raiz.getChildren("detalles");
+    public List<DetalleOrdenTrabajo> findAll() {
+    List<DetalleOrdenTrabajo> detalles = new ArrayList<>();
 
-        for (Element eDetalle : eListaDetalles) {
-            DetalleOrdenTrabajo dActual = new DetalleOrdenTrabajo();
-            dActual.setIdDetalle(eDetalle.getAttributeValue("idDetalle"));
-            dActual.setCantidad(Integer.parseInt(eDetalle.getChildText("cantidad")));
-            dActual.setObservaciones(eDetalle.getChildText("observaciones"));
-            dActual.setTipoDetalle(eDetalle.getChildText("tipoDetalle"));
-            dActual.setEstado(eDetalle.getChildText("estado"));
-            
-             // 2. Construir lista de todos los servicios del detalle
+    Element eListaDetalles = raiz.getChild("detalles");
+    if (eListaDetalles == null) {
+        return detalles; // Si no hay detalles, lista vacía
+    }
+
+    List<Element> listaDetalles = eListaDetalles.getChildren("detalle");
+
+    for (Element eDetalle : listaDetalles) {
+        DetalleOrdenTrabajo dActual = new DetalleOrdenTrabajo();
+        dActual.setIdDetalle(eDetalle.getAttributeValue("idDetalle"));
+        dActual.setCantidad(Integer.parseInt(eDetalle.getChildText("cantidad")));
+        dActual.setObservaciones(eDetalle.getChildText("observaciones"));
+        dActual.setTipoDetalle(eDetalle.getChildText("tipoDetalle"));
+        dActual.setEstado(eDetalle.getChildText("estado"));
+
+        // Servicios
         List<Servicio> servicios = new ArrayList<>();
-        Element eServicios = eDetalle.getChild("servicios"); //traer del detalle la el servicio
+        Element eServicios = eDetalle.getChild("servicios");
         if (eServicios != null) {
-         for (Element eService : eServicios.getChildren("servicio")) {
-               
-                String descripcion = eService.getChildText("descripcion");
-                double precio = Double.parseDouble(eService.getChildText("precio"));
-                double costoManoObra = Double.parseDouble(eService.getChildText("precio"));
-                
+            for (Element eService : eServicios.getChildren("servicio")) {
                 Servicio service = new Servicio();
-               
-                service.setDescripcion(descripcion);
-                service.setPrecio(precio);
-                service.setCostoManoObra(costoManoObra);
-              
+                service.setDescripcion(eService.getChildText("descripcion"));
+                service.setPrecio(Double.parseDouble(eService.getChildText("precio")));
+                service.setCostoManoObra(Double.parseDouble(eService.getChildText("costoManoObra")));
                 servicios.add(service);
             }
-            
-             }
-            dActual.setServicio(servicios); //TO DO 
-            
-            // 3. Construir lista de todos los repuestos del detalle
+        }
+        dActual.setServicio(servicios);
+
+        // Repuestos
         List<Repuesto> repuestos = new ArrayList<>();
-        Element eRepuestos = eDetalle.getChild("repuestos"); 
-        if (eServicios != null) {
-         for (Element eService : eServicios.getChildren("repuesto")) {
-                int cantidad = Integer.parseInt(eService.getChildText("cantidad"));
-                String nombreRepuesto = eService.getChildText("nombreRepuesto");
-                double precio = Double.parseDouble(eService.getChildText("precio"));
-                boolean fuePedido = Boolean.valueOf(eService.getChildText("fuePedido"));
-                
+        Element eRepuestos = eDetalle.getChild("repuestos");
+        if (eRepuestos != null) {
+            for (Element eRepuesto : eRepuestos.getChildren("repuesto")) {
                 Repuesto repuesto = new Repuesto();
-               
-                repuesto.setCantidad(cantidad);
-                repuesto.setNombreRepuesto(nombreRepuesto);
-                repuesto.setPrecio(precio);
-                repuesto.setFuePedido(fuePedido);
-                
+                repuesto.setCantidad(Integer.parseInt(eRepuesto.getChildText("cantidad")));
+                repuesto.setNombreRepuesto(eRepuesto.getChildText("nombreRepuesto"));
+                repuesto.setPrecio(Double.parseDouble(eRepuesto.getChildText("precio")));
+                repuesto.setFuePedido(Boolean.parseBoolean(eRepuesto.getChildText("fuePedido")));
                 repuestos.add(repuesto);
             }
-            
-             }
-            dActual.setRepuesto(repuestos); 
-            
-            
-            
-            detalles.add(dActual);
         }
+        dActual.setRepuesto(repuestos);
 
-        return detalles;
+        detalles.add(dActual);
     }
+
+    return detalles;
+}
+
+    
+     public void clear() {
+       File file = new File(rutaDocumento);
+        if (file.exists()) {
+           file.delete();
+          }
+     } 
 }

@@ -78,24 +78,36 @@ public class ClienteXmlData {
 
     public void insertarCliente(Cliente cliente) throws  IOException{
         //se trabaja con los 5 atributos e inserta al final
-        Element eCliente = new Element("autor");
-        eCliente.addContent(cliente.getIdCliente());
-    
+         //Verificar si ya existe un cliente con el mismo ID
+        List<Element> listaClientes = raiz.getChildren("clientes");
+
+        for (Element eCliente : listaClientes) {
+            if (cliente.getIdCliente().equals(eCliente.getAttributeValue("idCliente"))) {
+                System.out.println("Ya existe un cliente con ese ID, no se insertará.");
+                return; // Sale del método sin insertar
+            }
+        }
+
+        Element eCliente = new Element("cliente"); 
+        eCliente.setAttribute("idCliente", String.valueOf(cliente.getIdCliente()));
+
         Element eNombre = new Element("nombre");
         eNombre.addContent(cliente.getNombre());
+
         Element eTelefono = new Element("telefono");
         eTelefono.addContent(cliente.getTelefono());
+
         Element eCelular = new Element("celular");
         eCelular.addContent(cliente.getCelular());
+
         Element eDireccion = new Element("direccion");
-        eDireccion.addContent(cliente.getCelular());
-        
-        eCliente.setAttribute("idCliente",String.valueOf(cliente.getIdCliente()));
+        eDireccion.addContent(cliente.getDireccion()); 
+
         eCliente.addContent(eNombre);
         eCliente.addContent(eTelefono);
         eCliente.addContent(eCelular);
         eCliente.addContent(eDireccion);
-        
+
         raiz.addContent(eCliente);
         guardar();
     }//insertar
@@ -141,13 +153,14 @@ public class ClienteXmlData {
         //que devuelva una lista con los clientes sin el eliminado?
       public void eliminar(Cliente clienteToDelete){
         List<Element> eListaClientes = raiz.getChildren("cliente");
-        
-            for (Element eCliente : eListaClientes) {
-                  eCliente.removeAttribute(clienteToDelete.getIdCliente());
-                  eCliente.removeAttribute(clienteToDelete.getNombre());
-                  eCliente.removeAttribute(clienteToDelete.getCelular());
-                  eCliente.removeAttribute(clienteToDelete.getTelefono());
-                  eCliente.removeAttribute(clienteToDelete.getDireccion());
-               }
-    }
+
+        for (int i = 0; i < eListaClientes.size(); i++) {
+            Element eCliente = eListaClientes.get(i);
+
+            if (clienteToDelete.getIdCliente().equals(eCliente.getAttributeValue("id"))) {
+                eListaClientes.remove(i);
+                break; // salir, ya se eliminó
+            }
+        }
+}
 }

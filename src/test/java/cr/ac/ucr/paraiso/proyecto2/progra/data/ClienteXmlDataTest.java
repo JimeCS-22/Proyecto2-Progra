@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jdom2.JDOMException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,13 +23,13 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ClienteXmlDataTest {
     private String realPath;
     private String rutaDocumento;
-    
+    private List<Cliente> lista; 
     @BeforeEach
     public void setUp() {
         String baseWebapp = "src/main/webapp";
         this.rutaDocumento = "/WEB-INF/archivos/clientes.xml";
         File f = new File(baseWebapp + rutaDocumento);
-       
+          
         this.realPath = f.getAbsolutePath();
         try {
             // Crear archivo si no existe
@@ -81,7 +82,7 @@ public class ClienteXmlDataTest {
             instance.insertarCliente(cliente9);
             instance.insertarCliente(cliente10);
             
-            List<Cliente> lista = instance.findAll();
+            lista = instance.findAll();
             assertFalse(lista.isEmpty());
             assertEquals("001", lista.get(0).getIdCliente());
         } catch (JDOMException ex) {
@@ -96,13 +97,16 @@ public class ClienteXmlDataTest {
      */
     @Test
     public void testFindAll() {
-        System.out.println("findAll");
-        ClienteXmlData instance = null;
-        List<Cliente> expResult = null;
-        List<Cliente> result = instance.findAll();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        try {
+            ClienteXmlData instance = new ClienteXmlData(realPath);
+            lista = instance.findAll();
+            assertFalse(lista.isEmpty());
+            assertEquals("001", lista.get(0).getIdCliente());
+        } catch (JDOMException ex) {
+            Logger.getLogger(ClienteXmlDataTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ClienteXmlDataTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -134,12 +138,19 @@ public class ClienteXmlDataTest {
      */
     @Test
     public void testEliminar() {
-        System.out.println("eliminar");
-        Cliente clienteToDelete = null;
-        ClienteXmlData instance = null;
-        instance.eliminar(clienteToDelete);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        try {
+            System.out.println("eliminar");
+            Cliente clienteToDelete = new Cliente("010", "Valeria", "82211670", "85961629", "Paraiso");
+            ClienteXmlData instance = new ClienteXmlData(realPath);
+            instance.eliminar(clienteToDelete);
+            
+        } catch (JDOMException ex) {
+            Logger.getLogger(ClienteXmlDataTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ClienteXmlDataTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+        
     }
     
 }

@@ -2,3 +2,7 @@ HOJA DE REFERENCIAS
 
 Para actualizar datos en el archivo .xml : https://youtu.be/IJ5uW0pSYeQ?si=3CeCP4zlPV7Nfa4A
 https://drive.google.com/file/d/1U3pJzx8iB-OOiD6Acj8ekHU4pBBGECzR/view?usp=sharing
+
+Para eliminar el un children del archivo xml:
+http://www.jdom.org/docs/apidocs/index.html
+

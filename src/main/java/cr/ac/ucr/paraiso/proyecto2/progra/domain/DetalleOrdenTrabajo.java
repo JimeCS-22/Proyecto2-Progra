@@ -5,6 +5,7 @@
 package cr.ac.ucr.paraiso.proyecto2.progra.domain;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -90,7 +91,59 @@ public class DetalleOrdenTrabajo {
     public void setRepuesto(List<Repuesto> repuesto) {
         this.repuesto = repuesto;
     }
+
+    @Override
+    public String toString() {
+        return "DetalleOrdenTrabajo{" + "idDetalle=" + idDetalle + ", cantidad=" + cantidad + ", observaciones=" + observaciones + ", tipoDetalle=" + tipoDetalle + ", estado=" + estado + ", servicio=" + servicio + ", repuesto=" + repuesto + '}';
+    }
     
+    //to the asserts
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 83 * hash + Objects.hashCode(this.idDetalle);
+        hash = 83 * hash + this.cantidad;
+        hash = 83 * hash + Objects.hashCode(this.observaciones);
+        hash = 83 * hash + Objects.hashCode(this.tipoDetalle);
+        hash = 83 * hash + Objects.hashCode(this.estado);
+        hash = 83 * hash + Objects.hashCode(this.servicio);
+        hash = 83 * hash + Objects.hashCode(this.repuesto);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final DetalleOrdenTrabajo other = (DetalleOrdenTrabajo) obj;
+        if (this.cantidad != other.cantidad) {
+            return false;
+        }
+        if (!Objects.equals(this.idDetalle, other.idDetalle)) {
+            return false;
+        }
+        if (!Objects.equals(this.observaciones, other.observaciones)) {
+            return false;
+        }
+        if (!Objects.equals(this.tipoDetalle, other.tipoDetalle)) {
+            return false;
+        }
+        if (!Objects.equals(this.estado, other.estado)) {
+            return false;
+        }
+        if (!Objects.equals(this.servicio, other.servicio)) {
+            return false;
+        }
+        return Objects.equals(this.repuesto, other.repuesto);
+    }
     
     
     

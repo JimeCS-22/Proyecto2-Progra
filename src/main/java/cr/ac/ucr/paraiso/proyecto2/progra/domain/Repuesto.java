@@ -56,6 +56,11 @@ public class Repuesto {
     public void setFuePedido(boolean fuePedido) {
         this.fuePedido = fuePedido;
     }
+
+    @Override
+    public String toString() {
+        return "Repuesto{" + "cantidad=" + cantidad + ", nombreRepuesto=" + nombreRepuesto + ", precio=" + precio + ", fuePedido=" + fuePedido + '}';
+    }
     
     
     
