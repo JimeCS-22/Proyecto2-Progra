@@ -163,4 +163,24 @@ public class ClienteXmlData {
             }
         }
 }
+    //Metodo para buscar al cliente por ID
+    public Cliente findById(String idBuscado) {
+        if (raiz == null) {
+            return null;
+        }
+        List<Element> eListaClientes = raiz.getChildren("cliente");
+        for (Element eCliente : eListaClientes) {
+            String idActual = eCliente.getChildText("id_cliente"); 
+            if (idActual != null && idActual.equalsIgnoreCase(idBuscado)) {
+                Cliente clienteEncontrado = new Cliente();
+                clienteEncontrado.setIdCliente(idActual);
+                clienteEncontrado.setNombre(eCliente.getChildText("nombre"));
+                clienteEncontrado.setTelefono(eCliente.getChildText("telefono"));
+                clienteEncontrado.setCelular(eCliente.getChildText("celular"));
+                clienteEncontrado.setDireccion(eCliente.getChildText("direccion"));
+                return clienteEncontrado;
+            }
+        }
+        return null;
+    }
 }

@@ -23,69 +23,57 @@ import org.jdom2.JDOMException;
  *
  * @author jimen
  */
-@WebServlet(name = "insertarVehiculoServlet", urlPatterns = {"/insertarVehiculoServlet"})
-public class insertarVehiculoServlet extends HttpServlet {
+@WebServlet(name = "InsertarVehiculoServlet", urlPatterns = {"/InsertarVehiculoServlet"})
+public class InsertarVehiculoServlet extends HttpServlet {
 
     private String rutaBaseXML;
     private String rutaVehiculosXML;
     private String rutaClientesXML;
 
-       @Override
+    @Override
     public void init() throws ServletException {
-    
         this.rutaBaseXML = getServletContext().getRealPath("WEB-INF") + File.separator + "archivos" + File.separator;
-        this.rutaVehiculosXML = this.rutaBaseXML + "vehiculos.xml"; 
+        this.rutaVehiculosXML = this.rutaBaseXML + "vehiculos.xml";
         this.rutaClientesXML = this.rutaBaseXML + "clientes.xml";
     }
 
- 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.getRequestDispatcher("/insertarVehiculo.jsp").forward(request, response);
+       
     }
 
-    
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String mensaje = "";
-        String tipoMensaje = ""; 
+        String tipoMensaje = "";
 
         try {
            
-            VehiculosXmlData vehiculosData = VehiculosXmlData.abrirDocumento(rutaVehiculosXML);
-            ClienteXmlData clientesData = ClienteXmlData.abrirDocumento(rutaClientesXML);
+            VehiculosXmlData vehiculosData = VehiculosXmlData.abrirDocumento(rutaVehiculosXML, rutaClientesXML);
+            ClienteXmlData clientesData = ClienteXmlData.abrirDocumento(rutaClientesXML); 
 
-          
             String placa = request.getParameter("placa");
             String idClienteSeleccionado = request.getParameter("idCliente");
 
-            
             if (placa != null && !placa.trim().isEmpty() && idClienteSeleccionado != null && !idClienteSeleccionado.trim().isEmpty()) {
-               
+
                 Cliente clienteAsociado = null;
-                List<Cliente> todosLosClientes = clientesData.findAll();
-                for (Cliente c : todosLosClientes) {
-                    if (c.getIdCliente().equals(idClienteSeleccionado)) {
-                        clienteAsociado = c;
-                        break;
-                    }
-                }
+                
+                clienteAsociado = clientesData.findById(idClienteSeleccionado.trim());
 
                 if (clienteAsociado != null) {
-                    
+               
                     boolean placaExistente = false;
-                    List<Vehiculos> vehiculosExistentes = vehiculosData.findAll();
-                    for (Vehiculos v : vehiculosExistentes) {
-                        if (v.getPlaca().equalsIgnoreCase(placa.trim())) { 
-                            placaExistente = true;
-                            break;
-                        }
+                    Vehiculos vehiculoExistente = vehiculosData.findByPlaca(placa.trim());
+                    if (vehiculoExistente != null) {
+                         placaExistente = true;
                     }
 
                     if (!placaExistente) {
-                        // Crear el nuevo objeto Vehiculos y guardarlo
                         Vehiculos nuevoVehiculo = new Vehiculos(placa.trim(), clienteAsociado);
                         vehiculosData.insertarVehiculo(nuevoVehiculo);
                         mensaje = "Vehículo '" + placa.trim() + "' registrado con éxito para el cliente: " + clienteAsociado.getNombre();
@@ -106,16 +94,15 @@ public class insertarVehiculoServlet extends HttpServlet {
         } catch (JDOMException | IOException e) {
             mensaje = "Error al operar con los archivos XML: " + e.getMessage();
             tipoMensaje = "error";
-            e.printStackTrace(); 
+            e.printStackTrace();
         }
 
         request.setAttribute("mensaje", mensaje);
         request.setAttribute("tipoMensaje", tipoMensaje);
-     
-       request.getRequestDispatcher("/insertarVehiculo.jsp").forward(request, response);
+        request.getRequestDispatcher("/insertarVehiculo.jsp").forward(request, response);
+        
     }
 
-    
     @Override
     public String getServletInfo() {
         return "Servlet para la inserción de vehículos";

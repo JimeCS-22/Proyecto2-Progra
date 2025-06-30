@@ -44,7 +44,7 @@
             ClienteXmlData clientesData = ClienteXmlData.abrirDocumento(rutaClientesXML);
             clientesDisponibles = clientesData.findAll();
         } catch (Exception e) {
-            // Manejar error al cargar clientes para el dropdown
+           
             mensaje = (mensaje != null && !mensaje.isEmpty() ? mensaje + "<br>" : "") + 
                       "Advertencia: No se pudieron cargar los clientes para la selección. " + e.getMessage();
             tipoMensaje = "error";
@@ -87,7 +87,8 @@
         </form>
     </div>
 
-    <a href="<%= request.getContextPath() %>/WEB-INF/vehiculos/listarVehiculos.jsp" class="back-link">Ver Listado de Vehículos</a> 
+    <a href="<%= request.getContextPath() %>/ListarVehiculosServlet" class="action-link">Ver Listado de Vehículos</a>
+    <a href="<%= request.getContextPath() %>/ActualizarVehiculosServlet" class="action-link">Actualizar Vehiculos</a>
     <a href="<%= request.getContextPath() %>/index.jsp" class="back-link">Volver al Menú Principal</a> 
 </body>
 </html>

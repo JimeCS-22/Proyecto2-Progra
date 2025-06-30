@@ -25,56 +25,59 @@ import org.jdom2.JDOMException;
 @WebServlet(name = "ListarVehiculosServlet", urlPatterns = {"/ListarVehiculosServlet"})
 public class ListarVehiculosServlet extends HttpServlet {
 
- private String rutaVehiculosXML;
-    private String rutaClientesXML; 
+     private String rutaVehiculosXML;
+    private String rutaClientesXML;
 
     @Override
     public void init() throws ServletException {
-      
         String rutaBaseXML = getServletContext().getRealPath("WEB-INF") + File.separator + "archivos" + File.separator;
         this.rutaVehiculosXML = rutaBaseXML + "vehiculos.xml";
-        this.rutaClientesXML = rutaBaseXML + "clientes.xml"; 
+        this.rutaClientesXML = rutaBaseXML + "clientes.xml";
     }
 
-  
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String mensaje = "";
-        String tipoMensaje = ""; 
+        String mensaje = request.getParameter("mensaje"); 
+        String tipoMensaje = request.getParameter("tipoMensaje"); 
         List<Vehiculos> listaVehiculos = new ArrayList<>();
 
         try {
-         
-            VehiculosXmlData vehiculosData = VehiculosXmlData.abrirDocumento(rutaVehiculosXML);
             
-            listaVehiculos = vehiculosData.findAll(); 
+            VehiculosXmlData vehiculosData = VehiculosXmlData.abrirDocumento(rutaVehiculosXML, rutaClientesXML);
+
+            listaVehiculos = vehiculosData.findAll();
 
         } catch (JDOMException | IOException e) {
             mensaje = "Error al cargar la lista de vehículos: " + e.getMessage();
             tipoMensaje = "error";
-            e.printStackTrace(); 
+            e.printStackTrace();
         }
 
         request.setAttribute("listaVehiculos", listaVehiculos);
-        request.setAttribute("mensaje", mensaje);
-        request.setAttribute("tipoMensaje", tipoMensaje);
+      
+        if (request.getAttribute("mensaje") == null) {
+            request.setAttribute("mensaje", mensaje);
+            request.setAttribute("tipoMensaje", tipoMensaje);
+        }
 
-       request.getRequestDispatcher("/listadoVehiculos.jsp").forward(request, response);
+        request.getRequestDispatcher("/listadoVehiculos.jsp").forward(request, response);
+        
     }
 
-   
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+      
         doGet(request, response);
     }
 
-  
+
     @Override
     public String getServletInfo() {
         return "Servlet para el listado de vehículos";
     }
+
 
 }
