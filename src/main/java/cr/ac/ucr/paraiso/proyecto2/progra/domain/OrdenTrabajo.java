@@ -1,72 +1,86 @@
 package cr.ac.ucr.paraiso.proyecto2.progra.domain;
 
-import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalDate; // ¡Vamos a usar LocalDate para fechas modernas!
+import java.util.ArrayList; // Importamos ArrayList para inicializar listas
+import java.util.Date; // Mantener por compatibilidad, pero preferimos LocalDate
 import java.util.List;
 
 /**
- *
- * @author fabia
- * Orden de Trabajo
+ * Clase de dominio que representa una Orden de Trabajo.
+ * Contiene la información principal de la orden, el vehículo asociado
+ * y una lista de los detalles de la orden (servicios y repuestos).
+ * * @author fabia
  */
 public class OrdenTrabajo {
 
     private String id;
     private String descripcionSolicitud;
     private String estado;
-    private Date fechaIngreso;
-    private Date fechaDevolucionEstimada;
+    private LocalDate fechaIngreso; // ¡Cambiado a LocalDate!
+    private LocalDate fechaDevolucionEstimada; // ¡Cambiado a LocalDate!
 
     // Se llaman a las otras clases
     private List<DetalleOrdenTrabajo> detalles;
     private Vehiculos vehiculo; // Ya contiene al cliente
 
+    /**
+     * Constructor por defecto. Inicializa las listas para evitar NullPointerExceptions.
+     */
     public OrdenTrabajo() {
+        this.detalles = new ArrayList<>(); // Inicializamos la lista de detalles
     }
 
-    public OrdenTrabajo(String id, String descripcionSolicitud, String estado, Date fechaIngreso, Date fechaDevolucionEstimada, List<DetalleOrdenTrabajo> detalles, Vehiculos vehiculo) {
+    /**
+     * Constructor con todos los campos.
+     * @param id Identificador único de la orden de trabajo.
+     * @param descripcionSolicitud Descripción de la solicitud del cliente.
+     * @param estado Estado actual de la orden (ej. "Pendiente", "En Proceso", "Completada").
+     * @param fechaIngreso Fecha de ingreso del vehículo al taller.
+     * @param fechaDevolucionEstimada Fecha estimada de devolución del vehículo.
+     * @param detalles Lista de detalles de la orden (servicios y repuestos).
+     * @param vehiculo Objeto Vehiculos asociado a esta orden.
+     */
+    public OrdenTrabajo(String id, String descripcionSolicitud, String estado, LocalDate fechaIngreso, LocalDate fechaDevolucionEstimada, List<DetalleOrdenTrabajo> detalles, Vehiculos vehiculo) {
         this.id = id;
         this.descripcionSolicitud = descripcionSolicitud;
         this.estado = estado;
         this.fechaIngreso = fechaIngreso;
         this.fechaDevolucionEstimada = fechaDevolucionEstimada;
-        this.detalles = detalles;
+        this.detalles = (detalles != null) ? detalles : new ArrayList<>(); // Aseguramos que no sea null
         this.vehiculo = vehiculo;
     }
 
     /**
-     * Suma el costo total de todos los servicios y repuestos asociados a esta orden de trabajo.
+     * Calcula el costo total sumando el precio y costo de mano de obra de los servicios,
+     * y el precio por cantidad de los repuestos.
+     * Si no hay detalles o están vacíos, retorna 0.0.
+     * @return El costo total de la orden de trabajo.
      */
     public double calcularCostos() {
         double total = 0.0;
 
-        if (detalles != null) {
-            for (DetalleOrdenTrabajo detalle : detalles) {
-
-                // Si este detalle contiene servicios, los sumamos.
-                if (detalle.getServicio() != null) {
-                    for (Servicio s : detalle.getServicio()) {
-                        total += s.getPrecio() + s.getCostoManoObra();
-                    }
+        // Utilizamos la lista ya inicializada, no necesita verificación de null
+        for (DetalleOrdenTrabajo detalle : detalles) {
+            // Si este detalle contiene servicios, los sumamos.
+            if (detalle.getServicio() != null) {
+                for (Servicio s : detalle.getServicio()) {
+                    total += s.getPrecio() + s.getCostoManoObra();
                 }
+            }
 
-                // Si este detalle contiene repuestos, los sumamos.
-                if (detalle.getRepuesto() != null) {
-                    for (Repuesto r : detalle.getRepuesto()) {
-                        // Multiplicamos el precio del repuesto por la cantidad especificada en el detalle.
-                        // Esto asume que la 'cantidad' en DetalleOrdenTrabajo se aplica a cada repuesto
-                        // en la lista de 'repuesto' de ese detalle, o que solo habrá un repuesto
-                        // en esa lista.
-                        total += r.getPrecio() * detalle.getCantidad();
-                    }
+            // Si este detalle contiene repuestos, los sumamos.
+            if (detalle.getRepuesto() != null) {
+                for (Repuesto r : detalle.getRepuesto()) {
+                    // Multiplicamos el precio del repuesto por la cantidad especificada en el repuesto.
+                    total += r.getPrecio() * r.getCantidad();
                 }
             }
         }
-
         return total;
     }
 
-    // Setters y getters
+    // --- Setters y Getters ---
+
     public String getId() {
         return id;
     }
@@ -91,19 +105,19 @@ public class OrdenTrabajo {
         this.estado = estado;
     }
 
-    public Date getFechaIngreso() {
+    public LocalDate getFechaIngreso() {
         return fechaIngreso;
     }
 
-    public void setFechaIngreso(Date fechaIngreso) {
+    public void setFechaIngreso(LocalDate fechaIngreso) {
         this.fechaIngreso = fechaIngreso;
     }
 
-    public Date getFechaDevolucionEstimada() {
+    public LocalDate getFechaDevolucionEstimada() {
         return fechaDevolucionEstimada;
     }
 
-    public void setFechaDevolucionEstimada(Date fechaDevolucionEstimada) {
+    public void setFechaDevolucionEstimada(LocalDate fechaDevolucionEstimada) {
         this.fechaDevolucionEstimada = fechaDevolucionEstimada;
     }
 
@@ -112,7 +126,8 @@ public class OrdenTrabajo {
     }
 
     public void setDetalles(List<DetalleOrdenTrabajo> detalles) {
-        this.detalles = detalles;
+        // Aseguramos que la lista nunca sea null al ser asignada
+        this.detalles = (detalles != null) ? detalles : new ArrayList<>();
     }
 
     public Vehiculos getVehiculo() {
@@ -125,9 +140,14 @@ public class OrdenTrabajo {
 
     @Override
     public String toString() {
-        return "OrdenTrabajo{" + "id=" + id + ", descripcionSolicitud=" + descripcionSolicitud +
-                ", estado=" + estado + ", fechaIngreso=" + fechaIngreso +
+        return "OrdenTrabajo{" +
+                "id='" + id + '\'' +
+                ", descripcionSolicitud='" + descripcionSolicitud + '\'' +
+                ", estado='" + estado + '\'' +
+                ", fechaIngreso=" + fechaIngreso +
                 ", fechaDevolucionEstimada=" + fechaDevolucionEstimada +
-                ", detalles=" + detalles + ", vehiculo=" + vehiculo + '}';
+                ", detalles=" + detalles +
+                ", vehiculo=" + vehiculo +
+                '}';
     }
 }

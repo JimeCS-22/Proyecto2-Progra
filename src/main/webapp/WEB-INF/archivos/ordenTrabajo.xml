@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ordenesDeTrabajo>
+  <ordenTrabajo>
+    <id>OT001</id>
+    <descripcionSolicitud>Mantenimiento preventivo anual y revisión de frenos</descripcionSolicitud>
+    <estado>En Proceso</estado>
+    <fechaIngreso>2025-06-25</fechaIngreso>
+    <fechaDevolucionEstimada>2025-07-02</fechaDevolucionEstimada>
+    <vehiculo>
+      <placa>ABC-123</placa>
+    </vehiculo>
+    <detalles>
+      <detalle>
+        <idDetalle>DET001-01</idDetalle>
+        <cantidad>1</cantidad>
+        <observaciones>Servicio de cambio de aceite y filtro.</observaciones>
+        <tipoDetalle>Servicio</tipoDetalle>
+        <estadoDetalle>Completado</estadoDetalle>
+        <servicios>
+          <servicio>
+            <descripcion>Cambio de aceite de motor (sintético)</descripcion>
+            <precio>75.0</precio>
+            <costoManoObra>30.0</costoManoObra>
+          </servicio>
+        </servicios>
+        <repuestos>
+          <repuesto>
+            <cantidad>1</cantidad>
+            <nombreRepuesto>Filtro de Aceite</nombreRepuesto>
+            <precio>18.0</precio>
+            <fuePedido>false</fuePedido>
+          </repuesto>
+          <repuesto>
+            <cantidad>5</cantidad>
+            <nombreRepuesto>Litro de Aceite Sintético</nombreRepuesto>
+            <precio>12.0</precio>
+            <fuePedido>false</fuePedido>
+          </repuesto>
+        </repuestos>
+      </detalle>
+      <detalle>
+        <idDetalle>DET001-02</idDetalle>
+        <cantidad>1</cantidad>
+        <observaciones>Revisión y ajuste de frenos delanteros y traseros.</observaciones>
+        <tipoDetalle>Servicio</tipoDetalle>
+        <estadoDetalle>En Proceso</estadoDetalle>
+        <servicios>
+          <servicio>
+            <descripcion>Revisión de sistema de frenos</descripcion>
+            <precio>40.0</precio>
+            <costoManoObra>20.0</costoManoObra>
+          </servicio>
+          <servicio>
+            <descripcion>Ajuste y limpieza de frenos</descripcion>
+            <precio>25.0</precio>
+            <costoManoObra>15.0</costoManoObra>
+          </servicio>
+        </servicios>
+        <repuestos></repuestos>
+      </detalle>
+    </detalles>
+  </ordenTrabajo>
+
+  <ordenTrabajo>
+    <id>OT002</id>
+    <descripcionSolicitud>Reparación de aire acondicionado y revisión de neumáticos</descripcionSolicitud>
+    <estado>Pendiente</estado>
+    <fechaIngreso>2025-06-28</fechaIngreso>
+    <fechaDevolucionEstimada>2025-07-08</fechaDevolucionEstimada>
+    <vehiculo>
+      <placa>XYZ-789</placa>
+    </vehiculo>
+    <detalles>
+      <detalle>
+        <idDetalle>DET002-01</idDetalle>
+        <cantidad>1</cantidad>
+        <observaciones>Diagnóstico y recarga de gas refrigerante del A/C.</observaciones>
+        <tipoDetalle>Mixto</tipoDetalle>
+        <estadoDetalle>Pendiente</estadoDetalle>
+        <servicios>
+          <servicio>
+            <descripcion>Diagnóstico de sistema de A/C</descripcion>
+            <precio>50.0</precio>
+            <costoManoObra>25.0</costoManoObra>
+          </servicio>
+          <servicio>
+            <descripcion>Recarga de gas refrigerante (R134a)</descripcion>
+            <precio>60.0</precio>
+            <costoManoObra>20.0</costoManoObra>
+          </servicio>
+        </servicios>
+        <repuestos>
+          <repuesto>
+            <cantidad>1</cantidad>
+            <nombreRepuesto>Válvula de expansión A/C</nombreRepuesto>
+            <precio>80.0</precio>
+            <fuePedido>true</fuePedido>
+          </repuesto>
+        </repuestos>
+      </detalle>
+      <detalle>
+        <idDetalle>DET002-02</idDetalle>
+        <cantidad>4</cantidad>
+        <observaciones>Revisión de presión y rotación de neumáticos.</observaciones>
+        <tipoDetalle>Servicio</tipoDetalle>
+        <estadoDetalle>Completado</estadoDetalle>
+        <servicios>
+          <servicio>
+            <descripcion>Revisión y ajuste de presión de neumáticos</descripcion>
+            <precio>10.0</precio>
+            <costoManoObra>5.0</costoManoObra>
+          </servicio>
+          <servicio>
+            <descripcion>Rotación de neumáticos</descripcion>
+            <precio>20.0</precio>
+            <costoManoObra>10.0</costoManoObra>
+          </servicio>
+        </servicios>
+        <repuestos></repuestos>
+      </detalle>
+    </detalles>
+  </ordenTrabajo>
+</ordenesDeTrabajo>

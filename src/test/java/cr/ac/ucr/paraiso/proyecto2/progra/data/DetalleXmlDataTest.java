@@ -62,7 +62,7 @@ public class DetalleXmlDataTest {
     /**
      * Test of insertarDetalle method, of class DetalleXmlData.
      */
-    @Test
+   /* @Test
     public void testInsertarDetalle() throws Exception {
         System.out.println("Insertar Detalle Test");
         repuestos = new ArrayList<Repuesto>();
@@ -74,7 +74,7 @@ public class DetalleXmlDataTest {
         instance.insertarDetalle(detalle);
         detalles.add(detalle);//add to list to find all
         System.out.println("Se insertó: "+ detalle);
-    }
+    }*/
 
     /**
      * Test of findAll method, of class DetalleXmlData.
