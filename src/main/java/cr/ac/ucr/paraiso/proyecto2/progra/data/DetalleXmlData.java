@@ -27,7 +27,8 @@ import org.jdom2.output.XMLOutputter;
  * @author Camila
  */
 public class DetalleXmlData {
-      private Document document;
+    
+    private Document document;
     private Element raiz;
     private String rutaDocumento;
 
