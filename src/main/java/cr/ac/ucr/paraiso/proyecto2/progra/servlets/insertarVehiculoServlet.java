@@ -23,18 +23,18 @@ import org.jdom2.JDOMException;
  *
  * @author jimen
  */
-@WebServlet(name = "insertarVehiculoServlet", urlPatterns = {"/insertarVehiculoServlet"})
-public class insertarVehiculoServlet extends HttpServlet {
+@WebServlet(name = "insertarVehiculoServlet", urlPatterns = {"/InsertarVehiculoServlet"})
+public class InsertarVehiculoServlet extends HttpServlet {
 
     private String rutaBaseXML;
     private String rutaVehiculosXML;
     private String rutaClientesXML;
 
-    @Override
+       @Override
     public void init() throws ServletException {
- 
-        this.rutaBaseXML = getServletContext().getRealPath("WEB-INF") + File.separator;
-        this.rutaVehiculosXML = this.rutaBaseXML + "vehiculos.xml";
+    
+        this.rutaBaseXML = getServletContext().getRealPath("WEB-INF") + File.separator + "archivos" + File.separator;
+        this.rutaVehiculosXML = this.rutaBaseXML + "vehiculos.xml"; 
         this.rutaClientesXML = this.rutaBaseXML + "clientes.xml";
     }
 
@@ -42,7 +42,7 @@ public class insertarVehiculoServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/vehiculos/insertarVehiculo.jsp").forward(request, response);
+        request.getRequestDispatcher("/insertarVehiculo.jsp").forward(request, response);
     }
 
     
@@ -112,7 +112,7 @@ public class insertarVehiculoServlet extends HttpServlet {
         request.setAttribute("mensaje", mensaje);
         request.setAttribute("tipoMensaje", tipoMensaje);
      
-        request.getRequestDispatcher("/WEB-INF/vehiculos/insertarVehiculo.jsp").forward(request, response);
+       request.getRequestDispatcher("/insertarVehiculo.jsp").forward(request, response);
     }
 
     
