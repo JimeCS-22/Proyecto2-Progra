@@ -38,7 +38,7 @@
         String mensaje = (String) request.getAttribute("mensaje");
         String tipoMensaje = (String) request.getAttribute("tipoMensaje");
         
-        String rutaClientesXML = application.getRealPath("WEB-INF") + File.separator + "clientes.xml";
+        String rutaClientesXML = application.getRealPath("WEB-INF/archivos") + File.separator + "clientes.xml";
         List<Cliente> clientesDisponibles = new ArrayList<>();
         try {
             ClienteXmlData clientesData = ClienteXmlData.abrirDocumento(rutaClientesXML);

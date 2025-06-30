@@ -23,8 +23,8 @@ import org.jdom2.JDOMException;
  *
  * @author jimen
  */
-@WebServlet(name = "insertarVehiculoServlet", urlPatterns = {"/InsertarVehiculoServlet"})
-public class InsertarVehiculoServlet extends HttpServlet {
+@WebServlet(name = "insertarVehiculoServlet", urlPatterns = {"/insertarVehiculoServlet"})
+public class insertarVehiculoServlet extends HttpServlet {
 
     private String rutaBaseXML;
     private String rutaVehiculosXML;

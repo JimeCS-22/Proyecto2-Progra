@@ -6,16 +6,17 @@ package cr.ac.ucr.paraiso.proyecto2.progra.servlets;
 
 import cr.ac.ucr.paraiso.proyecto2.progra.data.ClienteXmlData;
 import cr.ac.ucr.paraiso.proyecto2.progra.domain.*;
+import jakarta.servlet.ServletContext;
 import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import javax.servlet.ServletContext;
+//import javax.servlet.ServletContext;
 import org.jdom2.JDOMException;
 
 /**
