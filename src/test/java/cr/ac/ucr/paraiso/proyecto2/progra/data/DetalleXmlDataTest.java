@@ -6,6 +6,7 @@ package cr.ac.ucr.paraiso.proyecto2.progra.data;
 
 import cr.ac.ucr.paraiso.proyecto2.progra.domain.DetalleOrdenTrabajo;
 import cr.ac.ucr.paraiso.proyecto2.progra.domain.Repuesto;
+import cr.ac.ucr.paraiso.proyecto2.progra.domain.Servicio;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class DetalleXmlDataTest {
     private String realPath;
     private String rutaDocumento;
     private List<Repuesto> repuestos;
+    private List<Servicio> servicios;
     private List<DetalleOrdenTrabajo> detalles;
     
     @BeforeEach
@@ -65,11 +67,16 @@ public class DetalleXmlDataTest {
    /* @Test
     public void testInsertarDetalle() throws Exception {
         System.out.println("Insertar Detalle Test");
+
+        detalles = new ArrayList<DetalleOrdenTrabajo>();
+        //config serv
+        servicios = new ArrayList<Servicio>();
+        servicios.add(new Servicio("Cambiar llantas",12000.00,5000.0));
+        //config repuestos
         repuestos = new ArrayList<Repuesto>();
-         detalles = new ArrayList<DetalleOrdenTrabajo>();
         repuestos.add(new Repuesto(3,"Manguera",25000.00,true));
         System.out.println(repuestos);
-        DetalleOrdenTrabajo detalle = new DetalleOrdenTrabajo("01",1, "Se utilizaron 3","Repuesto","En proceso",null, repuestos);
+        DetalleOrdenTrabajo detalle = new DetalleOrdenTrabajo("01",1, "Se utilizaron 3","Repuesto","En proceso",servicios, repuestos);
         DetalleXmlData instance = new DetalleXmlData(realPath);
         instance.insertarDetalle(detalle);
         detalles.add(detalle);//add to list to find all

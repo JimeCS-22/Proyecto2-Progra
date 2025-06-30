@@ -46,30 +46,19 @@ public class InsertarClienteServlet extends HttpServlet {
    
 @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // 1) Ponemos siempre la lista de clientes en el request
-        req.setAttribute("clientes", clientes);
+      
+       try { 
+        ServletContext ctx = req.getServletContext();// Cargamos los clientes desde el XML
+        String fullPathL = ctx.getRealPath("/WEB-INF/archivos/clientes.xml");
+        ClienteXmlData data = new ClienteXmlData(fullPathL);
+        clientes = data.findAll();
+        req.setAttribute("clientes", clientes);  //Ponemos siempre la lista de clientes en el request
 
-        // 2) Vemos si llegó un parámetro idAutor para filtrar libros
-        String idParam = req.getParameter("idCliente");
-        if (idParam != null && !idParam.isEmpty()) {
-            int idAutor = Integer.parseInt(idParam);
-            List<Cliente> lista = new LinkedList<>();
-
-            // Cargamos los libros desde el XML
-            ServletContext ctx = req.getServletContext();
-            String fullPathL = ctx.getRealPath("/WEB-INF/archivos/clientes.xml");
-            try {
-                ClienteXmlData data = ClienteXmlData.abrirDocumento(fullPathL);
-                lista = data.findAll();
-            } catch (JDOMException ex) {
-                log("Error cargando libros", ex);
+        }catch (JDOMException ex) {
+                log("Error cargando clientes", ex);
             }
 
-            // 3) Asignamos la lista de libros al request
-            req.setAttribute("clientes", lista);
-        }
-
-        // 4) Forward al JSP que mostrará el select + tabla
+        // 4) Forward al JSP que mostrará tabla
         req.getRequestDispatcher("/insertarCliente.jsp").forward(req, resp);
     }
   

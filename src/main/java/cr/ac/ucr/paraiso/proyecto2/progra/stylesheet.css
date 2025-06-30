@@ -1,0 +1,114 @@
+/*
+    Created on : 22 abr. 2021, 15:21:29
+    Author     : Profesor Gilberth Chaves A <gchavesav@ucr.ac.cr>
+    Adaptado por : ChatGPT Y Camila
+*/
+body {
+    background-color: #eff0eb;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+/* Botones */
+button {
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #e0ecb9;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+button:hover {
+    background-color: #c8d3a3;
+    transform: scaleY(1.1);
+}
+
+button:active {
+    transform: scale(0.9);
+}
+
+/* Barra de navegación */
+.navbar {
+    background-color: #e0ecb9;
+    opacity: 0.5;
+    border: 2px solid black;
+    padding: 10px;
+}
+
+.navbar .label {
+    font-size: 20px;
+    color: white;
+    padding: 7px;
+}
+
+/* Ítems de menú */
+.menu-item {
+    background-color: darkgray;
+    color: black;
+    padding: 10px;
+    display: inline-block;
+    transition: all 0.2s;
+}
+
+.menu-item:hover {
+    background-color: black;
+    color: white;
+    font-size: 14px;
+}
+
+/* Tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+}
+
+td:hover {
+    background-color: #91c3dd;
+}
+
+tr:nth-child(even) {
+    background-color: whitesmoke;
+}
+
+th {
+    background-color: white;
+    color: #52677A;
+    font-size: 16px;
+}
+
+th:hover {
+    background-color: whitesmoke;
+}
+
+/* Select (ComboBox estilo web) */
+select {
+    background-color: #3498db;
+    color: white;
+    font-size: 14px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 2px solid #2980b9;
+}
+
+select option {
+    background-color: #ecf0f1;
+    color: #2c3e50;
+}
+
+select option:checked {
+    background-color: #2980b9;
+    color: white;
+}
+
+

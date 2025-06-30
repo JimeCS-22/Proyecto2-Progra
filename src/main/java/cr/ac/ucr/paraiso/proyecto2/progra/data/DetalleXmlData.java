@@ -78,6 +78,15 @@ public class DetalleXmlData {
     }
 
     public void insertarDetalle(DetalleOrdenTrabajo detalle) throws  IOException{
+       // Validación para evitar duplicados por idDetalle
+    List<Element> eListaDetalles = raiz.getChildren("detalle");
+    for (Element eDetalleExistente : eListaDetalles) {
+        String idExistente = eDetalleExistente.getAttributeValue("idDetalle");
+        if (idExistente != null && idExistente.equals(detalle.getIdDetalle())) {
+            System.out.println(" Ya existe un detalle con el ID: " + idExistente + ". No se puede agregar.");
+            return; // Salir sin insertar
+        }
+    }
         //se trabaja con los 5 atributos + servicio y repuesto e inserta al final
         Element eDetalle = new Element("detalle");
         eDetalle.addContent(detalle.getIdDetalle());
@@ -91,11 +100,19 @@ public class DetalleXmlData {
         Element eStatus = new Element("estado");
         eStatus.addContent(detalle.getEstado());
         
-        Element eServicio = new Element("servicios");
-        eServicio.addContent(String.valueOf(detalle.getServicio()));
+      Element eServicio = new Element("servicios");
+       for (Servicio s : detalle.getServicio()) {
+            Element eS = new Element("servicio");
+            eS.addContent(s.getDescripcion()); // ajustá según tus atributos
+            eServicio.addContent(eS);
+        }
+
         Element eRepuesto = new Element("repuestos");
-        eRepuesto.addContent(String.valueOf(detalle.getRepuesto()));
-        
+        for (Repuesto r : detalle.getRepuesto()) {
+            Element eR = new Element("repuesto");
+            eR.addContent(r.getNombreRepuesto()); // ajustá según tus atributos
+            eRepuesto.addContent(eR);
+        }
         eDetalle.setAttribute("idDetalle",String.valueOf(detalle.getIdDetalle()));
         eDetalle.addContent(eCantidad);
         eDetalle.addContent(eObservaciones);
