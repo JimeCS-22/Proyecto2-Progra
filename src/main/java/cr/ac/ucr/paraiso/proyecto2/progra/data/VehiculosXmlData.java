@@ -81,12 +81,10 @@ public class VehiculosXmlData {
        
     }
 
-    
     public void insertarVehiculo(Vehiculos vehiculo) throws IOException {
-        
         if (findByPlaca(vehiculo.getPlaca()) != null) {
             System.out.println("Ya existe un vehículo con placa '" + vehiculo.getPlaca() + "', no se insertará.");
-            return; 
+            return;
         }
         
         Element eVehiculo = new Element("vehiculo");
@@ -98,8 +96,13 @@ public class VehiculosXmlData {
         Element eCliente = new Element("cliente");
         if (vehiculo.getCliente() != null) {
             eCliente.addContent(new Element("id_cliente").setText(vehiculo.getCliente().getIdCliente()));
+            eCliente.addContent(new Element("nombre").setText(vehiculo.getCliente().getNombre()));
+            eCliente.addContent(new Element("telefono").setText(vehiculo.getCliente().getTelefono()));
+           
         } else {
             eCliente.addContent(new Element("id_cliente").setText("N/A"));
+            eCliente.addContent(new Element("nombre").setText("N/A")); 
+            eCliente.addContent(new Element("telefono").setText("N/A")); 
         }
         eVehiculo.addContent(eCliente);
 
@@ -107,7 +110,7 @@ public class VehiculosXmlData {
         guardar();
     }
 
-  
+   
     public List<Vehiculos> findAll() {
         List<Vehiculos> vehiculos = new ArrayList<>();
         if (raiz == null) {
@@ -120,17 +123,29 @@ public class VehiculosXmlData {
             String placa = eVehiculo.getChildText("placa");
 
             Cliente cliente = null;
-            Element eCliente = eVehiculo.getChild("cliente");
+            Element eCliente = eVehiculo.getChild("cliente"); 
             if (eCliente != null) {
                 String idCliente = eCliente.getChildText("id_cliente"); 
 
+              
                 if (idCliente != null && !idCliente.equals("N/A") && !idCliente.isEmpty()) {
-                    if (clienteData != null) {
+                    if (clienteData != null) { 
                         cliente = clienteData.findById(idCliente);
                     }
                 }
+
+                if (cliente == null) {
+                    String nombreClienteAnidado = eCliente.getChildText("nombre");
+                    String telefonoClienteAnidado = eCliente.getChildText("telefono");
+                    
+                    cliente = new Cliente();
+                    cliente.setIdCliente(idCliente != null ? idCliente : "N/A"); 
+                    cliente.setNombre(nombreClienteAnidado != null ? nombreClienteAnidado : "N/A");
+                    cliente.setTelefono(telefonoClienteAnidado != null ? telefonoClienteAnidado : "N/A");
+          
+                }
             }
-            vehiculos.add(new Vehiculos(placa, cliente));
+            vehiculos.add(new Vehiculos(placa, cliente)); 
         }
         return vehiculos;
     }
@@ -147,12 +162,24 @@ public class VehiculosXmlData {
                 String idCliente = null;
                 Element clienteElement = e.getChild("cliente");
                 if (clienteElement != null) {
-                    idCliente = clienteElement.getChildText("id_cliente"); 
+                    idCliente = clienteElement.getChildText("id_cliente");
                 }
 
                 Cliente clienteAsociado = null;
+                
                 if (idCliente != null && !idCliente.isEmpty() && !idCliente.equals("N/A") && clienteData != null) {
                     clienteAsociado = clienteData.findById(idCliente);
+                }
+
+                if (clienteAsociado == null) {
+                    String nombreAnidado = clienteElement != null ? clienteElement.getChildText("nombre") : null;
+                    String telefonoAnidado = clienteElement != null ? clienteElement.getChildText("telefono") : null;
+
+                    clienteAsociado = new Cliente();
+                    clienteAsociado.setIdCliente(idCliente != null ? idCliente : "N/A");
+                    clienteAsociado.setNombre(nombreAnidado != null ? nombreAnidado : "N/A");
+                    clienteAsociado.setTelefono(telefonoAnidado != null ? telefonoAnidado : "N/A");
+                    
                 }
                 return new Vehiculos(placa, clienteAsociado);
             }
@@ -160,9 +187,8 @@ public class VehiculosXmlData {
         return null;
     }
 
-    
+   
     public boolean actualizarVehiculo(String placaOriginal, Vehiculos vehiculoActualizado) throws IOException, JDOMException {
-    
         if (raiz == null) {
             return false;
         }
@@ -170,7 +196,6 @@ public class VehiculosXmlData {
         List<Element> elementosVehiculos = raiz.getChildren("vehiculo");
         Element vehiculoEncontradoElement = null;
 
-       
         for (Element e : elementosVehiculos) {
             String placaExistente = e.getChildText("placa");
             if (placaExistente != null && placaExistente.equalsIgnoreCase(placaOriginal)) {
@@ -180,45 +205,57 @@ public class VehiculosXmlData {
         }
 
         if (vehiculoEncontradoElement == null) {
-            return false; 
+            return false;
         }
 
         if (!placaOriginal.equalsIgnoreCase(vehiculoActualizado.getPlaca())) {
             for (Element otherVehiculo : elementosVehiculos) {
                 if (otherVehiculo != vehiculoEncontradoElement && otherVehiculo.getChildText("placa").equalsIgnoreCase(vehiculoActualizado.getPlaca())) {
-                    return false; 
+                    return false;
                 }
             }
         }
 
         vehiculoEncontradoElement.getChild("placa").setText(vehiculoActualizado.getPlaca());
 
-     
         Element clienteElement = vehiculoEncontradoElement.getChild("cliente");
         if (clienteElement == null) {
             clienteElement = new Element("cliente");
             vehiculoEncontradoElement.addContent(clienteElement);
         }
 
-        
         Element idClienteEl = clienteElement.getChild("id_cliente");
         if (idClienteEl == null) {
             idClienteEl = new Element("id_cliente");
             clienteElement.addContent(idClienteEl);
         }
+        
+        Element nombreEl = clienteElement.getChild("nombre");
+        if (nombreEl == null) {
+            nombreEl = new Element("nombre");
+            clienteElement.addContent(nombreEl);
+        }
+        Element telefonoEl = clienteElement.getChild("telefono");
+        if (telefonoEl == null) {
+            telefonoEl = new Element("telefono");
+            clienteElement.addContent(telefonoEl);
+        }
 
         if (vehiculoActualizado.getCliente() != null) {
             idClienteEl.setText(vehiculoActualizado.getCliente().getIdCliente());
+            nombreEl.setText(vehiculoActualizado.getCliente().getNombre());
+            telefonoEl.setText(vehiculoActualizado.getCliente().getTelefono());
         } else {
-            idClienteEl.setText("N/A"); 
+            idClienteEl.setText("N/A");
+            nombreEl.setText("N/A");
+            telefonoEl.setText("N/A");
         }
-
         
         guardar();
         return true;
     }
 
-   
+    
     public void clear() throws IOException {
         File file = new File(rutaDocumento);
         if (file.exists()) {
@@ -231,8 +268,7 @@ public class VehiculosXmlData {
             System.out.println("El archivo XML de vehículos no existe: " + rutaDocumento);
         }
         this.raiz = new Element("vehiculos"); 
-        this.document = new Document(raiz);   
+        this.document = new Document(raiz); 
         guardar(); 
     }
-    
 }

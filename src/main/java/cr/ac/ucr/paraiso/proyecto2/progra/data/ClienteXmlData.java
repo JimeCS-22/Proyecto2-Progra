@@ -163,14 +163,16 @@ public class ClienteXmlData {
             }
         }
 }
-    //Metodo para buscar al cliente por ID
     public Cliente findById(String idBuscado) {
         if (raiz == null) {
+            System.out.println("DEBUG: La raíz del documento de clientes es null en findById().");
             return null;
         }
         List<Element> eListaClientes = raiz.getChildren("cliente");
         for (Element eCliente : eListaClientes) {
-            String idActual = eCliente.getChildText("id_cliente"); 
+          
+            String idActual = eCliente.getAttributeValue("idCliente"); 
+
             if (idActual != null && idActual.equalsIgnoreCase(idBuscado)) {
                 Cliente clienteEncontrado = new Cliente();
                 clienteEncontrado.setIdCliente(idActual);
@@ -178,9 +180,11 @@ public class ClienteXmlData {
                 clienteEncontrado.setTelefono(eCliente.getChildText("telefono"));
                 clienteEncontrado.setCelular(eCliente.getChildText("celular"));
                 clienteEncontrado.setDireccion(eCliente.getChildText("direccion"));
+                System.out.println("DEBUG: Cliente con ID " + idActual + " encontrado."); // Debug
                 return clienteEncontrado;
             }
         }
+        System.out.println("DEBUG: Cliente con ID " + idBuscado + " NO encontrado."); // Debug
         return null;
     }
 }

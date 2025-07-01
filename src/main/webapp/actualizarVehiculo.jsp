@@ -62,7 +62,7 @@
 
     <div class="container">
         <% if (vehiculoAEditar != null) { %>
-            <form action="<%= request.getContextPath() %>/ActualizarVehiculoServlet" method="POST">
+            <form action="<%= request.getContextPath() %>/ActualizarVehiculoServlet"" method="POST">
                 <div>
                     <label for="placaOriginal">Placa Original:</label>
                     

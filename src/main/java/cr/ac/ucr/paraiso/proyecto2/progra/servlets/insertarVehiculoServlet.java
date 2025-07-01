@@ -40,8 +40,30 @@ public class InsertarVehiculoServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/insertarVehiculo.jsp").forward(request, response);
-       
+        try {
+            // Inicializar ClienteXmlData para cargar la lista de clientes
+            ClienteXmlData clientesData = ClienteXmlData.abrirDocumento(rutaClientesXML);
+            List<Cliente> listaClientes = clientesData.findAll(); // Asumiendo que ClienteXmlData tiene findAll()
+
+            // Pasar la lista de clientes al JSP
+            request.setAttribute("listaClientes", listaClientes);
+
+            // Si hay un mensaje de error previo, asegúrate de que se pase también
+            String mensaje = request.getParameter("mensaje");
+            String tipoMensaje = request.getParameter("tipoMensaje");
+            if (mensaje != null && !mensaje.isEmpty()) {
+                request.setAttribute("mensaje", mensaje);
+                request.setAttribute("tipoMensaje", tipoMensaje);
+            }
+
+            request.getRequestDispatcher("/insertarVehiculo.jsp").forward(request, response);
+        } catch (JDOMException | IOException e) {
+            String errorMessage = "Error al cargar los clientes para el formulario: " + e.getMessage();
+            e.printStackTrace();
+            request.setAttribute("mensaje", errorMessage);
+            request.setAttribute("tipoMensaje", "error");
+            request.getRequestDispatcher("/errorGenerico.jsp").forward(request, response); // O a una página de error
+        }
     }
 
 
