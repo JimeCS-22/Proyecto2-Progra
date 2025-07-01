@@ -32,6 +32,7 @@ public class InsertarClienteServlet extends HttpServlet {
      @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)throws ServletException, IOException {
        try {
+           this.clientes = new ArrayList<Cliente>();
            Cliente cliente = new Cliente();
            cliente.setIdCliente(req.getParameter("idCliente"));
            cliente.setNombre(req.getParameter("nombre"));
@@ -46,7 +47,7 @@ public class InsertarClienteServlet extends HttpServlet {
            
            ClienteXmlData data = new ClienteXmlData(rutaReal);
            data.insertarCliente(cliente);
-  
+           
            clientes.add(cliente);
            req.getRequestDispatcher("/ver_cliente.jsp?idCliente="+cliente.getIdCliente() +
                    "&nombre="+cliente.getNombre() + "&telefono=" + cliente.getTelefono() +"&celular="+
@@ -59,12 +60,13 @@ public class InsertarClienteServlet extends HttpServlet {
    
 @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-      
        try { 
         ServletContext ctx = req.getServletContext();// Cargamos los clientes desde el XML
-        String fullPathL = ctx.getRealPath("/WEB-INF/archivos/clientes.xml");
-        ClienteXmlData data = new ClienteXmlData(fullPathL);
-        clientes = data.findAll();
+        String rutaRelativa = "/WEB-INF/archivos/clientes.xml";
+        String rutaReal = getServletContext().getRealPath(rutaRelativa);
+        
+        ClienteXmlData data = new ClienteXmlData(rutaReal);
+        this.clientes = data.findAll();
         req.setAttribute("clientes", clientes);  //Ponemos siempre la lista de clientes en el request
 
         }catch (JDOMException ex) {
