@@ -12,7 +12,7 @@
         <title>Cliente insertado</title>
     </head>
     <body>
-        <h1>Información del cliente</h1>
+        <h1>Información del cliente ingresado</h1>
         <% int identificacion = Integer.parseInt(request.getParameter("idCliente"));
             String nombre = request.getParameter("nombre");
             String telefono = request.getParameter("telefono");
@@ -25,7 +25,7 @@
         Celular: <%= celular %><br>
         Dirección: <%= direccion %><br>
         
-       <form action="pagina.html">
+       <form action="insertarCliente.jsp">
     <button type="submit" onclick="window.location.href='insertarCliente.jsp'" >Regresar</button>
 </form>
     </body>

@@ -14,16 +14,15 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-//import javax.servlet.ServletContext;
 import org.jdom2.JDOMException;
 
 /**
- *
  * @author Camila M
  */
 @WebServlet(name = "InsertarClienteServlet", urlPatterns = {"/InsertarClienteServlet"})
@@ -41,21 +40,19 @@ public class InsertarClienteServlet extends HttpServlet {
            cliente.setDireccion(req.getParameter("direccion"));
            
            //colocar la ruta valida donde esta el xml
-           String baseWebapp = "src/main/webapp";
-           String rutaDocumento = "/WEB-INF/archivos/clientes.xml";
-           File f = new File(baseWebapp + rutaDocumento);
+           String rutaRelativa = "/WEB-INF/archivos/clientes.xml";
+
+           String rutaReal = getServletContext().getRealPath(rutaRelativa);
            
-           String realPath = f.getAbsolutePath();
-           
-           // enviar el empleado para insertar al 
-           ClienteXmlData data = new ClienteXmlData(realPath);
+           ClienteXmlData data = new ClienteXmlData(rutaReal);
            data.insertarCliente(cliente);
+  
            clientes.add(cliente);
            req.getRequestDispatcher("/ver_cliente.jsp?idCliente="+cliente.getIdCliente() +
                    "&nombre="+cliente.getNombre() + "&telefono=" + cliente.getTelefono() +"&celular="+
                    cliente.getCelular() + "&direccion=" + cliente.getDireccion()).forward(req, resp);
            
-       } catch (JDOMException ex) {
+       }catch (JDOMException ex) {
            Logger.getLogger(InsertarClienteServlet.class.getName()).log(Level.SEVERE, null, ex);
        }
     }
@@ -77,8 +74,4 @@ public class InsertarClienteServlet extends HttpServlet {
         // 4) Forward al JSP que mostrará tabla
         req.getRequestDispatcher("/insertarCliente.jsp").forward(req, resp);
     }
-  
-     
-
-  
 }
