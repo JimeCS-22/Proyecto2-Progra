@@ -188,7 +188,7 @@ public class VehiculosXmlData {
     }
 
    
-    public boolean actualizarVehiculo(String placaOriginal, Vehiculos vehiculoActualizado) throws IOException, JDOMException {
+     public boolean actualizarVehiculo(String placaOriginal, Vehiculos vehiculoActualizado) throws IOException, JDOMException {
         if (raiz == null) {
             return false;
         }
@@ -205,19 +205,23 @@ public class VehiculosXmlData {
         }
 
         if (vehiculoEncontradoElement == null) {
-            return false;
+            return false; // Vehículo con la placa original no encontrado
         }
 
+        // Si la placa ha cambiado, verificar que la nueva placa no exista ya en otro vehículo
         if (!placaOriginal.equalsIgnoreCase(vehiculoActualizado.getPlaca())) {
             for (Element otherVehiculo : elementosVehiculos) {
+                // Asegurarse de no compararlo consigo mismo (elemento original)
                 if (otherVehiculo != vehiculoEncontradoElement && otherVehiculo.getChildText("placa").equalsIgnoreCase(vehiculoActualizado.getPlaca())) {
-                    return false;
+                    return false; // La nueva placa ya existe en otro vehículo
                 }
             }
         }
 
+        // Actualizar la placa (si ha cambiado)
         vehiculoEncontradoElement.getChild("placa").setText(vehiculoActualizado.getPlaca());
 
+        // Actualizar la información del cliente asociado
         Element clienteElement = vehiculoEncontradoElement.getChild("cliente");
         if (clienteElement == null) {
             clienteElement = new Element("cliente");
@@ -229,7 +233,6 @@ public class VehiculosXmlData {
             idClienteEl = new Element("id_cliente");
             clienteElement.addContent(idClienteEl);
         }
-        
         Element nombreEl = clienteElement.getChild("nombre");
         if (nombreEl == null) {
             nombreEl = new Element("nombre");
@@ -246,6 +249,7 @@ public class VehiculosXmlData {
             nombreEl.setText(vehiculoActualizado.getCliente().getNombre());
             telefonoEl.setText(vehiculoActualizado.getCliente().getTelefono());
         } else {
+            // Si por alguna razón el cliente se desvincula o es nulo
             idClienteEl.setText("N/A");
             nombreEl.setText("N/A");
             telefonoEl.setText("N/A");

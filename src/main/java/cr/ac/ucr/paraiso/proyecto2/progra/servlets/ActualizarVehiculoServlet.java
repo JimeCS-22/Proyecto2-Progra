@@ -26,59 +26,56 @@ import org.jdom2.JDOMException;
 @WebServlet(name = "ActualizarVehiculoServlet", urlPatterns = {"/ActualizarVehiculoServlet"})
 public class ActualizarVehiculoServlet extends HttpServlet {
 
+   private String rutaBaseXML;
     private String rutaVehiculosXML;
     private String rutaClientesXML;
 
     @Override
     public void init() throws ServletException {
-        String rutaBaseXML = getServletContext().getRealPath("WEB-INF") + File.separator + "archivos" + File.separator;
-        this.rutaVehiculosXML = rutaBaseXML + "vehiculos.xml";
-        this.rutaClientesXML = rutaBaseXML + "clientes.xml";
+        this.rutaBaseXML = getServletContext().getRealPath("WEB-INF") + File.separator + "archivos" + File.separator;
+        this.rutaVehiculosXML = this.rutaBaseXML + "vehiculos.xml";
+        this.rutaClientesXML = this.rutaBaseXML + "clientes.xml";
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String placa = request.getParameter("placa");
-        Vehiculos vehiculoAEditar = null;
-        String mensaje = "";
-        String tipoMensaje = "";
+        String mensaje = null;
+        String tipoMensaje = null;
+        Vehiculos vehiculo = null;
+        List<Cliente> listaClientes = new java.util.ArrayList<>();
 
-        List<Cliente> clientesDisponibles = new java.util.ArrayList<>();
+        String placaParam = request.getParameter("placa"); 
+
         try {
+            VehiculosXmlData vehiculosData = VehiculosXmlData.abrirDocumento(rutaVehiculosXML, rutaClientesXML);
             ClienteXmlData clientesData = ClienteXmlData.abrirDocumento(rutaClientesXML);
-            clientesDisponibles = clientesData.findAll();
+            listaClientes = clientesData.findAll(); 
+
+            if (placaParam != null && !placaParam.trim().isEmpty()) {
+                vehiculo = vehiculosData.findByPlaca(placaParam.trim());
+
+                if (vehiculo == null) {
+                    mensaje = "Error: El vehículo con placa '" + placaParam + "' no fue encontrado.";
+                    tipoMensaje = "error";
+                } 
+            } else {
+                
+                mensaje = "Ingrese la placa del vehículo a buscar.";
+                tipoMensaje = "info";
+            }
+
         } catch (JDOMException | IOException e) {
-            mensaje = (mensaje != null && !mensaje.isEmpty() ? mensaje + "<br>" : "") +
-                      "Advertencia: No se pudieron cargar los clientes para la selección. " + e.getMessage();
+            mensaje = "Error al cargar los datos: " + e.getMessage();
             tipoMensaje = "error";
             e.printStackTrace();
         }
-        request.setAttribute("clientesDisponibles", clientesDisponibles); // Pasa la lista de clientes al JSP
 
-        if (placa != null && !placa.trim().isEmpty()) {
-            try {
-                VehiculosXmlData vehiculosData = VehiculosXmlData.abrirDocumento(rutaVehiculosXML, rutaClientesXML);
-                vehiculoAEditar = vehiculosData.findByPlaca(placa.trim());
-
-                if (vehiculoAEditar == null) {
-                    mensaje = "Vehículo con placa '" + placa + "' no encontrado.";
-                    tipoMensaje = "error";
-                }
-
-            } catch (JDOMException | IOException e) {
-                mensaje = "Error al cargar los datos del vehículo para edición: " + e.getMessage();
-                tipoMensaje = "error";
-                e.printStackTrace();
-            }
-        } else {
-            mensaje = "No se especificó la placa del vehículo a editar.";
-            tipoMensaje = "error";
-        }
-
-        request.setAttribute("vehiculoAEditar", vehiculoAEditar);
+        request.setAttribute("vehiculo", vehiculo);
+        request.setAttribute("listaClientes", listaClientes);
         request.setAttribute("mensaje", mensaje);
         request.setAttribute("tipoMensaje", tipoMensaje);
+        request.setAttribute("placaParam", placaParam); 
 
         request.getRequestDispatcher("/actualizarVehiculo.jsp").forward(request, response);
     }
@@ -88,56 +85,85 @@ public class ActualizarVehiculoServlet extends HttpServlet {
             throws ServletException, IOException {
         String mensaje = "";
         String tipoMensaje = "";
+        Vehiculos vehiculoActualizado = null;
+        List<Cliente> listaClientes = new java.util.ArrayList<>();
 
-        String placaActual = request.getParameter("placaActual");
-        String nuevaPlaca = request.getParameter("nuevaPlaca");
+        String placaOriginal = request.getParameter("placaOriginal");
+        String nuevaPlaca = request.getParameter("placa");
         String idClienteSeleccionado = request.getParameter("idCliente");
 
-        if (placaActual != null && !placaActual.trim().isEmpty() &&
-            nuevaPlaca != null && !nuevaPlaca.trim().isEmpty() &&
-            idClienteSeleccionado != null && !idClienteSeleccionado.trim().isEmpty()) {
+        try {
+            VehiculosXmlData vehiculosData = VehiculosXmlData.abrirDocumento(rutaVehiculosXML, rutaClientesXML);
+            ClienteXmlData clientesData = ClienteXmlData.abrirDocumento(rutaClientesXML);
+            listaClientes = clientesData.findAll();
 
-            try {
-                VehiculosXmlData vehiculosData = VehiculosXmlData.abrirDocumento(rutaVehiculosXML, rutaClientesXML);
-                ClienteXmlData clientesData = ClienteXmlData.abrirDocumento(rutaClientesXML);
+            if (placaOriginal != null && !placaOriginal.trim().isEmpty() &&
+                nuevaPlaca != null && !nuevaPlaca.trim().isEmpty() &&
+                idClienteSeleccionado != null && !idClienteSeleccionado.trim().isEmpty()) {
 
                 Cliente clienteAsociado = clientesData.findById(idClienteSeleccionado.trim());
 
                 if (clienteAsociado != null) {
-                    Vehiculos vehiculoActualizado = new Vehiculos(nuevaPlaca.trim(), clienteAsociado);
+                    vehiculoActualizado = new Vehiculos(nuevaPlaca.trim(), clienteAsociado);
 
-                    boolean actualizado = vehiculosData.actualizarVehiculo(placaActual.trim(), vehiculoActualizado);
+                    boolean actualizado = vehiculosData.actualizarVehiculo(placaOriginal.trim(), vehiculoActualizado);
 
                     if (actualizado) {
-                        mensaje = "Vehículo '" + placaActual.trim() + "' actualizado a '" + nuevaPlaca.trim() + "' con éxito.";
+                        mensaje = "Vehículo con placa '" + placaOriginal.trim() + "' actualizado con éxito a '" + nuevaPlaca.trim() + "'.";
                         tipoMensaje = "success";
+                        
+                        vehiculoActualizado = vehiculosData.findByPlaca(nuevaPlaca.trim());
+                        
+                        placaOriginal = nuevaPlaca.trim();
                     } else {
-                        mensaje = "Error: No se pudo encontrar el vehículo con placa '" + placaActual.trim() + "' para actualizar o la nueva placa ya existe.";
+                        mensaje = "Error: No se pudo actualizar el vehículo. La nueva placa '" + nuevaPlaca.trim() + "' ya está registrada o hubo otro problema.";
                         tipoMensaje = "error";
+                        
+                        vehiculoActualizado = new Vehiculos(nuevaPlaca.trim(), clienteAsociado); 
                     }
                 } else {
-                    mensaje = "Error: El cliente seleccionado para el vehículo no fue encontrado.";
+                    mensaje = "Error: El cliente seleccionado no fue encontrado. Por favor, asegúrese de que el cliente exista.";
                     tipoMensaje = "error";
+                    
+                    vehiculoActualizado = vehiculosData.findByPlaca(placaOriginal.trim());
+                    
+                    
                 }
-
-            } catch (JDOMException | IOException e) {
-                mensaje = "Error al operar con los archivos XML durante la actualización: " + e.getMessage();
+            } else {
+                mensaje = "Error: Todos los campos (Placa, Cliente Propietario) son obligatorios.";
                 tipoMensaje = "error";
-                e.printStackTrace();
+               
+                if (placaOriginal != null && !placaOriginal.trim().isEmpty()) {
+                    vehiculoActualizado = vehiculosData.findByPlaca(placaOriginal.trim());
+                }
             }
-        } else {
-            mensaje = "Error: Faltan datos necesarios para la actualización del vehículo.";
+
+        } catch (JDOMException | IOException e) {
+            mensaje = "Error al operar con los archivos XML: " + e.getMessage();
             tipoMensaje = "error";
+            e.printStackTrace();
+            
+            if (placaOriginal != null && !placaOriginal.trim().isEmpty()) {
+                try {
+                    VehiculosXmlData vehiculosData = VehiculosXmlData.abrirDocumento(rutaVehiculosXML, rutaClientesXML);
+                    vehiculoActualizado = vehiculosData.findByPlaca(placaOriginal.trim());
+                } catch (JDOMException | IOException ex) {
+                    ex.printStackTrace(); 
+                }
+            }
         }
 
-        
-        response.sendRedirect(request.getContextPath() + "/ListarVehiculosServlet?mensaje=" +
-                java.net.URLEncoder.encode(mensaje, "UTF-8") + "&tipoMensaje=" + tipoMensaje);
+        request.setAttribute("vehiculo", vehiculoActualizado);
+        request.setAttribute("listaClientes", listaClientes);
+        request.setAttribute("mensaje", mensaje);
+        request.setAttribute("tipoMensaje", tipoMensaje);
+        request.setAttribute("placaParam", (vehiculoActualizado != null) ? vehiculoActualizado.getPlaca() : nuevaPlaca);
+
+        request.getRequestDispatcher("/actualizarVehiculo.jsp").forward(request, response);
     }
 
     @Override
     public String getServletInfo() {
-        return "Servlet para la edición de vehículos";
-    }
-
+        return "Servlet para la actualización de vehículos";
+    } 
 }

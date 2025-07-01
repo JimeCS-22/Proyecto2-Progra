@@ -18,12 +18,12 @@
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
         .form-group input[type="text"], .form-group select {
-            width: calc(100% - 22px); /* Ajuste para padding y borde */
+            width: calc(100% - 22px); 
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
             font-size: 16px;
-            box-sizing: border-box; /* Incluye padding y border en el ancho */
+            box-sizing: border-box; 
         }
         .form-group input[type="submit"] {
             background-color: #28a745;
