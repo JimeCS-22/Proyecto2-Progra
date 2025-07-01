@@ -41,15 +41,13 @@ public class InsertarRepuestoServlet extends HttpServlet {
         }
     }
 
-    // Método para manejar peticiones GET
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Simplemente redirige a la página JSP donde está el formulario
+        
         request.getRequestDispatcher("/insertarRepuesto.jsp").forward(request, response);
     }
 
-    // Método para manejar peticiones POST (ya lo tenías)
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

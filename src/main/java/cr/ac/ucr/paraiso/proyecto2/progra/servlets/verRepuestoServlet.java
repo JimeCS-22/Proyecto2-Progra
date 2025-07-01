@@ -30,18 +30,18 @@ public class verRepuestoServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        // La ruta de los archivos XML dentro de WEB-INF/archivos
+       
         rutaArchivos = getServletContext().getRealPath("WEB-INF") + File.separator + "archivos" + File.separator;
         try {
-            // Asegurarse de que el directorio exista
+            
             File directorio = new File(rutaArchivos);
             if (!directorio.exists()) {
-                directorio.mkdirs(); // Crea el directorio y los padres si no existen
+                directorio.mkdirs(); 
             }
-            // Inicializar RepuestosXmlData con la ruta completa del archivo XML
+           
             repuestosData = new RepuestosXmlData(rutaArchivos + "repuestos.xml");
         } catch (JDOMException | IOException ex) {
-            // Manejar la excepción
+           
             throw new ServletException("Error al inicializar RepuestosXmlData", ex);
         }
     }
