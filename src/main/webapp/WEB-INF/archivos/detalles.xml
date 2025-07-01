@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<detalles>
+<detalle idDetalle="01">
+    01<cantidad>1</cantidad>
+    <observaciones>Se utilizaron 3</observaciones>
+    <tipoDetalle>Repuesto</tipoDetalle>
+    <estado>En proceso</estado>
+    <servicios>
+        <servicio>Cambiar llantas</servicio>
+    </servicios>
+    <repuestos>
+        <repuesto>Manguera</repuesto>
+    </repuestos>
+</detalle>
+<detalle idDetalle="02">02<cantidad>1
+</cantidad>
+<observaciones>Se utilizaron 4</observaciones>
+<tipoDetalle>Repuesto</tipoDetalle>
+<estado>En proceso</estado>
+<servicios>
+    <servicio>Cambiar llantas12000.05000.0</servicio>
+</servicios>
+<repuestos>
+    <repuesto>Llantas CONTINENTAL 425000.0true</repuesto>
+</repuestos>
+</detalle>
+<detalle idDetalle="03">
+    03<cantidad>1</cantidad>
+    <observaciones>Se utilizaron 2 baldes</observaciones>
+    <tipoDetalle>Repuesto</tipoDetalle>
+    <estado>Completado</estado>
+    <servicios>
+        <servicio />
+        <descripcion>Cambiar puertas</descripcion>
+        <precio>12000.0</precio>
+        <costoManoObra>5000.0</costoManoObra>
+        <Cantidad>4</Cantidad>
+        <Precio>25000.0</Precio>
+        <fuePedido>true</fuePedido>
+    </servicios>
+    <repuestos>
+        <repuesto>Pintura Lanco </repuesto>
+    </repuestos>
+</detalle>
+</detalles>
+
