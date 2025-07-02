@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Repuestos>
+    <Repuesto>
+        <cantidad>50</cantidad>
+        <nombreRepuesto>Filtro de Aceite</nombreRepuesto>
+        <precio>15.75</precio>
+        <fuePedido>false</fuePedido>
+    </Repuesto>
+    <Repuesto>
+        <cantidad>120</cantidad>
+        <nombreRepuesto>Pastillas de Freno Delanteras</nombreRepuesto>
+        <precio>45.99</precio>
+        <fuePedido>true</fuePedido>
+    </Repuesto>
+    <Repuesto>
+        <cantidad>30</cantidad>
+        <nombreRepuesto>Bujía NGK</nombreRepuesto>
+        <precio>8.50</precio>
+        <fuePedido>false</fuePedido>
+    </Repuesto>
+    <Repuesto>
+        <cantidad>75</cantidad>
+        <nombreRepuesto>Lámpara H7</nombreRepuesto>
+        <precio>12.00</precio>
+        <fuePedido>false</fuePedido>
+    </Repuesto>
+    <Repuesto>
+        <cantidad>10</cantidad>
+        <nombreRepuesto>Amortiguador Trasero</nombreRepuesto>
+        <precio>89.90</precio>
+        <fuePedido>true</fuePedido>
+    </Repuesto>
+</Repuestos>

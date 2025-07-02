@@ -26,7 +26,7 @@ import org.jdom2.JDOMException;
 @WebServlet(name = "InsertarVehiculoServlet", urlPatterns = {"/InsertarVehiculoServlet"})
 public class InsertarVehiculoServlet extends HttpServlet {
 
-    private String rutaBaseXML;
+   private String rutaBaseXML;
     private String rutaVehiculosXML;
     private String rutaClientesXML;
 
@@ -40,8 +40,35 @@ public class InsertarVehiculoServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String mensaje = null; // Inicializar a null
+        String tipoMensaje = null; // Inicializar a null
+        List<Cliente> listaClientes = new java.util.ArrayList<>(); // Asegurarse de que la lista no sea null
+
+        try {
+            // Inicializar ClienteXmlData para cargar la lista de clientes
+            ClienteXmlData clientesData = ClienteXmlData.abrirDocumento(rutaClientesXML);
+            listaClientes = clientesData.findAll();
+
+            // Si hay un mensaje de error previo (ej. de un doPost fallido), recupéralo
+            String paramMensaje = request.getParameter("mensaje");
+            String paramTipoMensaje = request.getParameter("tipoMensaje");
+            if (paramMensaje != null && !paramMensaje.isEmpty()) {
+                mensaje = paramMensaje;
+                tipoMensaje = paramTipoMensaje;
+            }
+
+        } catch (JDOMException | IOException e) {
+            mensaje = "Error al cargar los clientes para el formulario: " + e.getMessage();
+            tipoMensaje = "error";
+            e.printStackTrace(); // Imprime el error en la consola del servidor
+        }
+
+        // Siempre establece los atributos antes de hacer forward, incluso si son null/vacíos
+        request.setAttribute("listaClientes", listaClientes);
+        request.setAttribute("mensaje", mensaje);
+        request.setAttribute("tipoMensaje", tipoMensaje);
+
         request.getRequestDispatcher("/insertarVehiculo.jsp").forward(request, response);
-       
     }
 
 
@@ -52,9 +79,8 @@ public class InsertarVehiculoServlet extends HttpServlet {
         String tipoMensaje = "";
 
         try {
-           
             VehiculosXmlData vehiculosData = VehiculosXmlData.abrirDocumento(rutaVehiculosXML, rutaClientesXML);
-            ClienteXmlData clientesData = ClienteXmlData.abrirDocumento(rutaClientesXML); 
+            ClienteXmlData clientesData = ClienteXmlData.abrirDocumento(rutaClientesXML);
 
             String placa = request.getParameter("placa");
             String idClienteSeleccionado = request.getParameter("idCliente");
@@ -62,15 +88,13 @@ public class InsertarVehiculoServlet extends HttpServlet {
             if (placa != null && !placa.trim().isEmpty() && idClienteSeleccionado != null && !idClienteSeleccionado.trim().isEmpty()) {
 
                 Cliente clienteAsociado = null;
-                
                 clienteAsociado = clientesData.findById(idClienteSeleccionado.trim());
 
                 if (clienteAsociado != null) {
-               
                     boolean placaExistente = false;
                     Vehiculos vehiculoExistente = vehiculosData.findByPlaca(placa.trim());
                     if (vehiculoExistente != null) {
-                         placaExistente = true;
+                        placaExistente = true;
                     }
 
                     if (!placaExistente) {
@@ -100,7 +124,7 @@ public class InsertarVehiculoServlet extends HttpServlet {
         request.setAttribute("mensaje", mensaje);
         request.setAttribute("tipoMensaje", tipoMensaje);
         request.getRequestDispatcher("/insertarVehiculo.jsp").forward(request, response);
-        
+
     }
 
     @Override

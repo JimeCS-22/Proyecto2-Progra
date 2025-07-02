@@ -87,8 +87,8 @@
 
     <a href="<%= request.getContextPath() %>/index.html" class="action-link">Volver al Menú Principal</a>
 
-    <a href="<%= request.getContextPath() %>/ActualizarVehiculosServlet" class="action-link">Actualizar Vehiculos</a>
-    <a href="<%= request.getContextPath() %>/index.html" class="action-link">Volver al Menú Principal</a>
+    <a href="<%= request.getContextPath() %>/ActualizarVehiculoServlet" class="action-link">Actualizar Vehiculos</a>
+   
 
 </body>
 </html>

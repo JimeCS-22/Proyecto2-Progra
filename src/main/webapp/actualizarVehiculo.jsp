@@ -1,14 +1,12 @@
 <%-- 
-    Document   : actualizarVehiculo
-    Created on : 30 jun 2025, 3:57:51 p. m.
+    Document   : actualizarCliente
+    Created on : 1 jul 2025, 10:58:23 a. m.
     Author     : jimen
 --%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="cr.ac.ucr.paraiso.proyecto2.progra.data.ClienteXmlData"%>
+
 <%@page import="cr.ac.ucr.paraiso.proyecto2.progra.domain.Cliente"%>
 <%@page import="cr.ac.ucr.paraiso.proyecto2.progra.domain.Vehiculos"%>
 <%@page import="java.util.List"%>
-<%@page import="java.io.File"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -17,41 +15,53 @@
     <title>Actualizar Vehículo</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
-        h1 { color: #333; }
-        .container { background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        form div { margin-bottom: 10px; }
-        label { display: inline-block; width: 150px; font-weight: bold; }
-        input[type="text"], select { width: 300px; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
-        button { padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
-        button:hover { background-color: #0056b3; }
+        h1 { color: #333; text-align: center; margin-bottom: 30px; }
+        .container { background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); margin: 0 auto; max-width: 500px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
+        .form-group input[type="text"], .form-group select {
+            width: calc(100% - 22px); 
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box; 
+        }
+        .form-group input[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .form-group input[type="submit"].search-button {
+            background-color: #6c757d; 
+        }
+        .form-group input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .form-group input[type="submit"].search-button:hover {
+            background-color: #5a6268;
+        }
         .message { margin-top: 15px; padding: 10px; border-radius: 4px; }
         .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
         .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-        .back-link { display: block; margin-top: 20px; color: #007bff; text-decoration: none; }
-        .back-link:hover { text-decoration: underline; }
+        .info { background-color: #cfe2ff; color: #055160; border: 1px solid #b6d4fe; } 
+        .action-link { display: inline-block; margin-top: 20px; margin-right: 15px; padding: 8px 12px; background-color: #6c757d; color: white; text-decoration: none; border-radius: 5px; }
+        .action-link:hover { background-color: #5a6268; }
     </style>
 </head>
 <body>
-    <h1>Actualizar Información del Vehículo</h1>
+    <h1>Actualizar Vehículo</h1>
 
     <%
-        
-        Vehiculos vehiculoAEditar = (Vehiculos) request.getAttribute("vehiculoAEditar");
         String mensaje = (String) request.getAttribute("mensaje");
         String tipoMensaje = (String) request.getAttribute("tipoMensaje");
-        
-        
-        String rutaClientesXML = application.getRealPath("WEB-INF/archivos") + File.separator + "clientes.xml";
-        List<Cliente> clientesDisponibles = new ArrayList<>();
-        try {
-            ClienteXmlData clientesData = ClienteXmlData.abrirDocumento(rutaClientesXML);
-            clientesDisponibles = clientesData.findAll();
-        } catch (Exception e) {
-            mensaje = (mensaje != null && !mensaje.isEmpty() ? mensaje + "<br>" : "") + 
-                      "Advertencia: No se pudieron cargar los clientes para la selección. " + e.getMessage();
-            tipoMensaje = "error";
-            e.printStackTrace();
-        }
+        Vehiculos vehiculo = (Vehiculos) request.getAttribute("vehiculo");
+        List<Cliente> listaClientes = (List<Cliente>) request.getAttribute("listaClientes");
+        String placaParam = (String) request.getAttribute("placaParam"); 
     %>
 
     <% if (mensaje != null && !mensaje.isEmpty()) { %>
@@ -61,48 +71,63 @@
     <% } %>
 
     <div class="container">
-        <% if (vehiculoAEditar != null) { %>
-            <form action="<%= request.getContextPath() %>/ActualizarVehiculoServlet" method="POST">
-                <div>
-                    <label for="placaOriginal">Placa Original:</label>
-                    
-                    <input type="text" id="placaOriginal" name="placaOriginal" value="<%= vehiculoAEditar.getPlaca() %>" readonly>
-                    
-                    <input type="hidden" name="placaActual" value="<%= vehiculoAEditar.getPlaca() %>">
+        <h2>Buscar Vehículo por Placa</h2>
+        <form action="<%= request.getContextPath() %>/ActualizarVehiculoServlet" method="get">
+            <div class="form-group">
+                <label for="searchPlaca">Ingrese la Placa del Vehículo a Actualizar:</label>
+                <input type="text" id="searchPlaca" name="placa" value="<%= (placaParam != null) ? placaParam : "" %>" required>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Buscar Vehículo" class="search-button">
+            </div>
+        </form>
+
+        <% if (vehiculo != null) { %>
+            <hr>
+            <h2>Datos del Vehículo (Placa: <%= vehiculo.getPlaca() %>)</h2>
+            <form action="<%= request.getContextPath() %>/ActualizarVehiculoServlet" method="post">
+                <input type="hidden" name="placaOriginal" value="<%= vehiculo.getPlaca() %>">
+
+                <div class="form-group">
+                    <label for="placa">Nueva Placa:</label>
+                    <input type="text" id="placa" name="placa" value="<%= vehiculo.getPlaca() %>" required>
                 </div>
-                <div>
-                    <label for="nuevaPlaca">Nueva Placa (si cambia):</label>
-                    <input type="text" id="nuevaPlaca" name="nuevaPlaca" value="<%= vehiculoAEditar.getPlaca() %>" required placeholder="Ej: XYZ-456">
-                </div>
-                <div>
+                <div class="form-group">
                     <label for="idCliente">Cliente Propietario:</label>
                     <select id="idCliente" name="idCliente" required>
                         <option value="">-- Seleccione un Cliente --</option>
-                        <% 
-                        if (clientesDisponibles.isEmpty()) {
-                        %>
-                            <option value="" disabled>No hay clientes registrados.</option>
                         <%
-                        } else {
-                            String idClienteActual = (vehiculoAEditar.getCliente() != null) ? vehiculoAEditar.getCliente().getIdCliente() : "";
-                            for (Cliente cliente : clientesDisponibles) {
-                                String selected = (cliente.getIdCliente().equals(idClienteActual)) ? "selected" : "";
+                            if (listaClientes != null && !listaClientes.isEmpty()) {
+                                for (Cliente cliente : listaClientes) {
+                                    String selected = "";
+                                    // Marcar el cliente actual del vehículo como seleccionado
+                                    if (vehiculo.getCliente() != null && cliente.getIdCliente().equals(vehiculo.getCliente().getIdCliente())) {
+                                        selected = "selected";
+                                    }
                         %>
-                                <option value="<%= cliente.getIdCliente() %>" <%= selected %>><%= cliente.getNombre() %> (ID: <%= cliente.getIdCliente() %>)</option>
+                                    <option value="<%= cliente.getIdCliente() %>" <%= selected %>><%= cliente.getNombre() %> (ID: <%= cliente.getIdCliente() %>)</option>
+                        <%
+                                }
+                            } else {
+                        %>
+                                <option value="" disabled>No hay clientes disponibles</option>
                         <%
                             }
-                        }
                         %>
                     </select>
                 </div>
-                <button type="submit">Guardar Cambios</button>
+                <div class="form-group">
+                    <input type="submit" value="Actualizar Vehículo">
+                </div>
             </form>
-        <% } else { %>
-            <p class="no-data">No se encontró el vehículo para editar o no se especificó la placa.</p>
+        <% } else if (placaParam != null && !placaParam.isEmpty()) { %>
+            <div class="message info">
+                Por favor, ingrese la placa del vehículo para buscar.
+            </div>
         <% } %>
     </div>
 
-    <a href="<%= request.getContextPath() %>/ListarVehiculosServlet" class="back-link">Volver al Listado de Vehículos</a>
-    <a href="<%= request.getContextPath() %>/index.jsp" class="back-link">Volver al Menú Principal</a>
+    <a href="<%= request.getContextPath() %>/ListarVehiculosServlet" class="action-link">Volver al Listado de Vehículos</a>
+    <a href="<%= request.getContextPath() %>/index.jsp" class="action-link">Volver al Menú Principal</a>
 </body>
 </html>
