@@ -1686,3 +1686,8 @@
 30-Jun-2025 23:15:00.275 INFO [http-nio-8080-exec-29] com.sun.faces.spi.InjectionProviderFactory.createInstance JSF1048: hay presentes anotaciones PostConstruct/PreDestroy.  Los métodos de beans administrados marcados con estas anotaciones procesarán dichas anotaciones.
 30-Jun-2025 23:15:01.117 INFO [http-nio-8080-exec-29] org.apache.catalina.startup.HostConfig.deployDescriptor Deployment of deployment descriptor [C:\Users\FAMILIA\Documents\GitHub\Proyecto2-Progra\apache-tomcat-10.1.42\conf\Catalina\localhost\Proyecto2-Progra.xml] has finished in [2.855] ms
 30-Jun-2025 23:15:01.131 INFO [http-nio-8080-exec-24] org.apache.catalina.util.LifecycleBase.start The start() method was called on component [StandardEngine[Catalina].StandardHost[localhost].StandardContext[/Proyecto2-Progra]] after start() had already been called. The second call will be ignored.
+30-Jun-2025 23:32:02.042 INFO [main] org.apache.catalina.core.StandardServer.await Se ha recibido un comando de apagado a través del puerto de apagado. Parando la instancia del Servidor.
+30-Jun-2025 23:32:02.043 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["http-nio-8080"]
+30-Jun-2025 23:32:02.055 INFO [main] org.apache.catalina.core.StandardService.stopInternal Parando servicio [Catalina]
+30-Jun-2025 23:32:02.096 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["http-nio-8080"]
+30-Jun-2025 23:32:02.122 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8080"]
