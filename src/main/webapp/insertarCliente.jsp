@@ -85,9 +85,10 @@
     <div>
         <label for="direccion">Dirección :</label>
         <input id="direccion" name="direccion" type="text" required>
+        
     </div>
   <button type="submit">Insertar</button>
-  <button type="submit">Actualizar</button>
+  <button type="submit" onclick="window.location.href='actualizarCliente.jsp'" >Actualizar</button>
   </form>
     </div>
 

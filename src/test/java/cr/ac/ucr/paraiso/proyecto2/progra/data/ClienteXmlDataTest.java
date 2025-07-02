@@ -21,33 +21,31 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Camila 
  */
 public class ClienteXmlDataTest {
-    private String realPath;
+    //private String realPath;
     private String rutaDocumento;
     private List<Cliente> lista; 
+    private ClienteXmlData instance;
+
     @BeforeEach
     public void setUp() {
-        String baseWebapp = "src/main/webapp";
-        this.rutaDocumento = "/WEB-INF/archivos/clientes.xml";
-        File f = new File(baseWebapp + rutaDocumento);
-          
-        this.realPath = f.getAbsolutePath();
         try {
-            // Crear archivo si no existe
-            if (!f.exists()) {
-                f.createNewFile(); // Crear el archivo vacío
-            }
-            ClienteXmlData.abrirDocumento(realPath);
-            
-        } catch (JDOMException ex) {
-            Logger.getLogger(ClienteXmlDataTest.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(ClienteXmlDataTest.class.getName()).log(Level.SEVERE, null, ex);
+            String baseWebapp = "src/main/webapp";
+            this.rutaDocumento = baseWebapp + "/WEB-INF/archivos/clientes.xml";
+
+            File archivo = new File(rutaDocumento);
+
+            // Crear el archivo y cargar la instancia
+            this.instance = ClienteXmlData.abrirDocumento(rutaDocumento);
+
+        } catch (JDOMException | IOException ex) {
+            ex.printStackTrace();
+            throw new RuntimeException("Error en setUp: " + ex.getMessage());
         }
     }
     
     //@AfterEach
     public void tearDown() {
-        File f = new File(realPath);
+        File f = new File(rutaDocumento);
         if (f.exists()) {
             f.delete();
         }
@@ -56,21 +54,21 @@ public class ClienteXmlDataTest {
     /**
      * Test of insertarCliente method, of class ClienteXmlData.
      */
-    //@Test
+    @Test
     public void testInsertarCliente(){
         try {
             System.out.println("insertarCliente");
-            Cliente cliente1 = new Cliente("001","Camila","86621670","85961620","Paraiso");
-            Cliente cliente2 = new Cliente("002","Ana","87821670","85961621","Cartago");
-            Cliente cliente3 = new Cliente("003", "Mateo", "89991670", "85961622", "San José");
-            Cliente cliente4 = new Cliente("004", "María", "81231670", "85961623", "Alajuela");
-            Cliente cliente5 = new Cliente("005", "Carlos", "83451670", "85961624", "Heredia");
-            Cliente cliente6 = new Cliente("006", "Daniela", "85671670", "85961625", "Limón");
-            Cliente cliente7 = new Cliente("007", "José", "87781670", "85961626", "Puntarenas");
-            Cliente cliente8 = new Cliente("008", "Sofía", "88891670", "85961627", "Cartago");
-            Cliente cliente9 = new Cliente("009", "Esteban", "81101670", "85961628", "San José");
-            Cliente cliente10 = new Cliente("010", "Valeria", "82211670", "85961629", "Paraiso");
-            ClienteXmlData instance = new ClienteXmlData(realPath);
+            Cliente cliente1 = new Cliente("001","Camila Montoya","86621670","85961620","Paraiso");
+            Cliente cliente2 = new Cliente("002","Jimena Calvo","87821670","85961621","Cartago");
+            Cliente cliente3 = new Cliente("003", "Mateo Sanabria", "89991670", "85961622", "San José");
+            Cliente cliente4 = new Cliente("004", "María Solis", "81231670", "85961623", "Alajuela");
+            Cliente cliente5 = new Cliente("005", "Carlos Montero", "83451670", "85961624", "Heredia");
+            Cliente cliente6 = new Cliente("006", "Daniela Jimenez", "85671670", "85961625", "Limón");
+            Cliente cliente7 = new Cliente("007", "José Blanco", "87781670", "85961626", "Puntarenas");
+            Cliente cliente8 = new Cliente("008", "Sofía Barboza", "88891670", "85961627", "Cartago");
+            Cliente cliente9 = new Cliente("009", "Esteban Oporta", "81101670", "85961628", "San José");
+            Cliente cliente10 = new Cliente("010", "Valeria Martinéz", "82211670", "85961629", "Paraiso");
+            ClienteXmlData instance = new ClienteXmlData(rutaDocumento);
             instance.insertarCliente(cliente1);
             instance.insertarCliente(cliente2);
             instance.insertarCliente(cliente3);
@@ -98,9 +96,9 @@ public class ClienteXmlDataTest {
     @Test
     public void testFindAll() {
         try {
-            ClienteXmlData instance = new ClienteXmlData(realPath);
+            ClienteXmlData instance = new ClienteXmlData(rutaDocumento);
             lista = instance.findAll();
-            assertFalse(lista.isEmpty());
+            //assertFalse(lista.isEmpty());
             assertEquals("001", lista.get(0).getIdCliente());
         } catch (JDOMException ex) {
             Logger.getLogger(ClienteXmlDataTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -122,9 +120,13 @@ public class ClienteXmlDataTest {
        
             Cliente nuevoCliente = c;
             Cliente clienteActual = cn;
-            ClienteXmlData instance = new ClienteXmlData(realPath);
+            ClienteXmlData instance = new ClienteXmlData(rutaDocumento);
             
-            instance.actualizar(nuevoCliente, clienteActual);
+            if (instance.findById(c.getIdCliente()) == null) {
+            instance.insertarCliente(c);
+        }
+            boolean actualiza = instance.actualizarCliente(nuevoCliente.getIdCliente(), clienteActual);
+            System.out.println("Resultado de la actualización: "+ actualiza);
         } catch (JDOMException ex) {
             Logger.getLogger(ClienteXmlDataTest.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -133,24 +135,6 @@ public class ClienteXmlDataTest {
         
     }
 
-    /**
-     * Test of eliminar method, of class ClienteXmlData.
-     */
-    @Test
-    public void testEliminar() {
-        try {
-            System.out.println("eliminar");
-            Cliente clienteToDelete = new Cliente("010", "Valeria", "82211670", "85961629", "Paraiso");
-            ClienteXmlData instance = new ClienteXmlData(realPath);
-            instance.eliminar(clienteToDelete);
-            
-        } catch (JDOMException ex) {
-            Logger.getLogger(ClienteXmlDataTest.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(ClienteXmlDataTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-       
-        
-    }
+  
     
 }

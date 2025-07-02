@@ -5,7 +5,6 @@
 --%>
 
 <%@page import="cr.ac.ucr.paraiso.proyecto2.progra.domain.Cliente"%>
-<%@page import="cr.ac.ucr.paraiso.proyecto2.progra.domain.Vehiculos"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>

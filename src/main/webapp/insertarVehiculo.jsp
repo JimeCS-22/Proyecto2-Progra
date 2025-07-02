@@ -91,6 +91,6 @@
     </div>
 
     <a href="<%= request.getContextPath() %>/ListarVehiculosServlet" class="action-link">Volver al Listado</a>
-    <a href="<%= request.getContextPath() %>/index.jsp" class="action-link">Volver al Menú Principal</a>
+    <a href="<%= request.getContextPath() %>/index.html" class="action-link">Volver al Menú Principal</a>
 </body>
 </html>

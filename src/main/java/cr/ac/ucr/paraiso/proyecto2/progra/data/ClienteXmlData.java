@@ -27,90 +27,81 @@ import org.jdom2.Element;
  * manejar datos de los clientes del clientes.xml
  */
 public class ClienteXmlData {
-    private Document document;
+      private Document document;
     private Element raiz;
     private String rutaDocumento;
 
-    //Constructor que se encarga de crear el DOM y el documento XML
-    private ClienteXmlData(String rutaDocumento, String nombreRaiz) throws IOException, JDOMException {
-        File file = new File(rutaDocumento);
-        if (file.exists()) {
-            abrirDocumento(rutaDocumento);
-        }else{
-            ClienteXmlData autorData = new ClienteXmlData(rutaDocumento);
-        }
-        this.rutaDocumento = rutaDocumento ;
-        this.raiz = new Element(nombreRaiz);
-        this.document = new Document(raiz);
-        guardar();
-    }
-
-    //Constructor que se encarga de parsear el documento XML
+    // Constructor público que carga el XML existente o crea uno nuevo
     public ClienteXmlData(String rutaDocumento) throws JDOMException, IOException {
+        File file = new File(rutaDocumento);
         this.rutaDocumento = rutaDocumento;
-        SAXBuilder saxBuilder = new SAXBuilder();
-        saxBuilder.setIgnoringElementContentWhitespace(true);
-        //parseo
-        this.document =saxBuilder.build(rutaDocumento);
-        this.raiz = document.getRootElement();
-        this.rutaDocumento = rutaDocumento;
+
+        if (file.exists()) {
+            SAXBuilder saxBuilder = new SAXBuilder();
+            saxBuilder.setIgnoringElementContentWhitespace(true);
+            this.document = saxBuilder.build(rutaDocumento);
+            this.raiz = document.getRootElement();
+        } else {
+            this.raiz = new Element("clientes");
+            this.document = new Document(raiz);
+            guardar();
+        }
     }
 
-    public static ClienteXmlData abrirDocumento(String rutaDocumento)throws JDOMException, IOException{
-        if (new File(rutaDocumento).exists() == true) {
-            return new ClienteXmlData(rutaDocumento);
-
-        }else return new ClienteXmlData(rutaDocumento,"clientes");
-
+    // Método estático para facilitar la apertura o creación del documento
+    public static ClienteXmlData abrirDocumento(String rutaDocumento) throws JDOMException, IOException {
+        return new ClienteXmlData(rutaDocumento);
     }
 
-    private void guardar() throws FileNotFoundException, IOException{
+    // Guardar los cambios al XML
+    private void guardar() throws FileNotFoundException, IOException {
         Format format = Format.getPrettyFormat();
-        format.setEncoding("UTF-8");//Es buena práctica especificar la codificación
+        format.setEncoding("UTF-8");
         XMLOutputter xmlOutputter = new XMLOutputter();
         PrintWriter printWriter = new PrintWriter(this.rutaDocumento);
-        xmlOutputter.output(this.document, new PrintWriter(this.rutaDocumento));
-        printWriter.close();//cerrarlo
-
-        //imprimir en consola el DOM
-        xmlOutputter.output(this.document,System.out);
+        xmlOutputter.output(this.document, printWriter);
+        printWriter.close();
     }
 
-    public void insertarCliente(Cliente cliente) throws  IOException{
-        //se trabaja con los 5 atributos e inserta al final
-         //Verificar si ya existe un cliente con el mismo ID
-        List<Element> listaClientes = raiz.getChildren("clientes");
+   public void insertarCliente(Cliente cliente) throws IOException {
+    List<Element> listaClientes = raiz.getChildren("cliente"); 
 
-        for (Element eCliente : listaClientes) {
-            if (cliente.getIdCliente().equals(eCliente.getAttributeValue("idCliente"))) {
-                System.out.println("Ya existe un cliente con ese ID, no se insertará.");
-                return; // Sale del método sin insertar
-            }
+    // Verificar si ya existe un cliente con el mismo ID
+    for (Element eCliente : listaClientes) {
+        if (cliente.getIdCliente().equals(eCliente.getAttributeValue("idCliente"))) {
+            System.out.println("Ya existe un cliente con ese ID, no se insertará.");
+            return;
         }
+    }
 
-        Element eCliente = new Element("cliente"); 
-        eCliente.setAttribute("idCliente", String.valueOf(cliente.getIdCliente()));
+    // Crear nuevo elemento cliente
+    Element eCliente = new Element("cliente");
+    eCliente.setAttribute("idCliente", cliente.getIdCliente());
 
-        Element eNombre = new Element("nombre");
-        eNombre.addContent(cliente.getNombre());
+    Element eNombre = new Element("nombre").setText(cliente.getNombre());
+    Element eTelefono = new Element("telefono").setText(cliente.getTelefono());
+    Element eCelular = new Element("celular").setText(cliente.getCelular());
+    Element eDireccion = new Element("direccion").setText(cliente.getDireccion());
 
-        Element eTelefono = new Element("telefono");
-        eTelefono.addContent(cliente.getTelefono());
+    eCliente.addContent(eNombre);
+    eCliente.addContent(eTelefono);
+    eCliente.addContent(eCelular);
+    eCliente.addContent(eDireccion);
 
-        Element eCelular = new Element("celular");
-        eCelular.addContent(cliente.getCelular());
+    // Insertar en la posición correcta según orden alfabético
+    int index = 0;
+    for (Element existente : listaClientes) {
+        String nombreExistente = existente.getChildText("nombre");
+        if (nombreExistente != null && nombreExistente.compareToIgnoreCase(cliente.getNombre()) > 0) {
+            break;
+        }
+        index++;
+    }
 
-        Element eDireccion = new Element("direccion");
-        eDireccion.addContent(cliente.getDireccion()); 
+    raiz.addContent(index, eCliente);
+    guardar();
+}
 
-        eCliente.addContent(eNombre);
-        eCliente.addContent(eTelefono);
-        eCliente.addContent(eCelular);
-        eCliente.addContent(eDireccion);
-
-        raiz.addContent(eCliente);
-        guardar();
-    }//insertar
 
     //para recorrer el archivo y retornar todos los clientes
     public List<Cliente> findAll(){
@@ -130,24 +121,48 @@ public class ClienteXmlData {
         return clientes;
     }
     
-    //actualiza en el archivo con la info del nuevo cliente - TO DO REVISAR 
-    public void actualizar(Cliente nuevoCliente, Cliente clienteActual){
-        List<Element> eListaClientes = raiz.getChildren("cliente");
+    //actualiza en el archivo con la info del nuevo cliente 
+   public boolean actualizarCliente(String idOriginal, Cliente clienteActualizado) throws IOException {
+    if (raiz == null) {
+        return false;
+    }
 
-        for (Element eCliente : eListaClientes) {
-            //si el id del nuevo cliente esta en la lista pasa a actualizar los atributos
-            if(nuevoCliente.getIdCliente().equals(String.valueOf(eCliente.getAttribute("idCliente"))) ){
-      
-            clienteActual.setIdCliente(eCliente.getAttributeValue("idCliente"));
-            clienteActual.setNombre(eCliente.getChildText("nombre"));
-            clienteActual.setTelefono(eCliente.getChildText("telefono"));
-            clienteActual.setCelular(eCliente.getChildText("celular"));
-            clienteActual.setDireccion(eCliente.getChildText("direccion"));
-            //clientes.add(clienteActual);
+    List<Element> elementosClientes = raiz.getChildren("cliente");
+    Element clienteEncontradoElement = null;
+
+    // Buscar el cliente por ID original
+    for (Element e : elementosClientes) {
+        String idExistente = e.getAttributeValue("idCliente"); 
+        if (idExistente != null && idExistente.equalsIgnoreCase(idOriginal)) {
+            clienteEncontradoElement = e;
+            break;
         }
-           
-        }
-     }
+    }
+
+    if (clienteEncontradoElement == null) {
+        return false; // Cliente no encontrado
+    }
+
+    // NO se permite cambiar el ID, solo actualizar otros campos
+    actualizarCampoSeguro(clienteEncontradoElement, "nombre", clienteActualizado.getNombre());
+    actualizarCampoSeguro(clienteEncontradoElement, "telefono", clienteActualizado.getTelefono());
+    actualizarCampoSeguro(clienteEncontradoElement, "celular", clienteActualizado.getCelular());
+    actualizarCampoSeguro(clienteEncontradoElement, "direccion", clienteActualizado.getDireccion());
+
+    guardar();
+    return true;
+}
+   //Para evitar NullPointerException si el nodo no existe
+private void actualizarCampoSeguro(Element padre, String nombreCampo, String nuevoValor) {
+    Element campo = padre.getChild(nombreCampo);
+    if (campo == null) {
+        campo = new Element(nombreCampo);
+        padre.addContent(campo);
+    }
+    campo.setText(nuevoValor);
+}
+
+
         
         //eliminar del archivo un cliente, atributo por atributo -no se pide pero puede ser útil
         //que devuelva una lista con los clientes sin el eliminado?
