@@ -4,6 +4,7 @@ import java.time.LocalDate; // ¡Vamos a usar LocalDate para fechas modernas!
 import java.util.ArrayList; // Importamos ArrayList para inicializar listas
 import java.util.Date; // Mantener por compatibilidad, pero preferimos LocalDate
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Clase de dominio que representa una Orden de Trabajo.
@@ -150,4 +151,52 @@ public class OrdenTrabajo {
                 ", vehiculo=" + vehiculo +
                 '}';
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 59 * hash + Objects.hashCode(this.id);
+        hash = 59 * hash + Objects.hashCode(this.descripcionSolicitud);
+        hash = 59 * hash + Objects.hashCode(this.estado);
+        hash = 59 * hash + Objects.hashCode(this.fechaIngreso);
+        hash = 59 * hash + Objects.hashCode(this.fechaDevolucionEstimada);
+        hash = 59 * hash + Objects.hashCode(this.detalles);
+        hash = 59 * hash + Objects.hashCode(this.vehiculo);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final OrdenTrabajo other = (OrdenTrabajo) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        if (!Objects.equals(this.descripcionSolicitud, other.descripcionSolicitud)) {
+            return false;
+        }
+        if (!Objects.equals(this.estado, other.estado)) {
+            return false;
+        }
+        if (!Objects.equals(this.fechaIngreso, other.fechaIngreso)) {
+            return false;
+        }
+        if (!Objects.equals(this.fechaDevolucionEstimada, other.fechaDevolucionEstimada)) {
+            return false;
+        }
+        if (!Objects.equals(this.detalles, other.detalles)) {
+            return false;
+        }
+        return Objects.equals(this.vehiculo, other.vehiculo);
+    }
+    
+    
 }

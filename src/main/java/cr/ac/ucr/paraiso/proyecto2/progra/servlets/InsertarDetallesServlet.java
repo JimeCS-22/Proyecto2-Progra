@@ -16,6 +16,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.jdom2.JDOMException;
 
 /**
  *
@@ -24,13 +27,27 @@ import java.io.File;
 @WebServlet(name="/InsertarDetallesServlet",urlPatterns = {"/InsertarDetallesServlet"})
 public class InsertarDetallesServlet extends HttpServlet {
     private String rutaDetallesXML; 
+    private DetalleXmlData data;
     @Override
     public void init() throws ServletException {
       
-        String rutaBaseXML = getServletContext().getRealPath("WEB-INF") + File.separator + "archivos" + File.separator;
-        this.rutaDetallesXML = rutaBaseXML + "detalles.xml"; 
+        try {
+            String rutaBaseXML = getServletContext().getRealPath("WEB-INF") + File.separator + "archivos" + File.separator;
+            this.rutaDetallesXML = rutaBaseXML + "detalles.xml";
+            this.data = new DetalleXmlData(rutaDetallesXML);
+            DetalleXmlData.abrirDocumento(rutaDetallesXML);
+            
+        } catch (JDOMException ex) {
+            Logger.getLogger(InsertarDetallesServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(InsertarDetallesServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    
+    @Override
+protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+        throws ServletException, IOException {
+    resp.sendRedirect(req.getContextPath() + "/gestionDetalles.jsp");
+}
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -41,26 +58,68 @@ public class InsertarDetallesServlet extends HttpServlet {
         DetalleOrdenTrabajo detalle = new DetalleOrdenTrabajo();
         detalle.setTipoDetalle(tipo);
 
-        if ("Repuestos".equals(tipo)) {
-            // Campos repuesto
-            Repuesto e = new Repuesto();
-            e.setNombreRepuesto(req.getParameter("nombreRepuesto"));
-            e.setCantidad(Integer.parseInt(req.getParameter("cantidad")));
-            e.setPrecio(Double.parseDouble(req.getParameter("precioRepuesto")));
-            e.setFuePedido("Si".equals(req.getParameter("pedido")));
-            detalle.getRepuesto().add(e);
-        } else {
-            // Campos servicio
-            Servicio s = new Servicio();
-            s.setDescripcion(req.getParameter("servicioRequerido"));
-            s.setPrecio(Double.parseDouble(req.getParameter("precioServicio")));
-            s.setCostoManoObra(Double.parseDouble(req.getParameter("costoManoObra")));
-            detalle.getServicio().add(s);
-        }
+        
+     if ("Repuestos".equals(tipo)) {
+    // Campos repuesto
+    String nombre = req.getParameter("nombreRepuesto");
+    String cantidadStr = req.getParameter("cantidad");
+    String precioStr = req.getParameter("precioRepuesto");
+    String pedido = req.getParameter("pedido");
 
+    if (nombre == null || nombre.trim().isEmpty() ||
+        cantidadStr == null || cantidadStr.trim().isEmpty() ||
+        precioStr == null || precioStr.trim().isEmpty()) {
+
+        req.setAttribute("errorMsg", "Todos los campos de repuesto son obligatorios.");
+        req.getRequestDispatcher("/gestionDetalles.jsp").forward(req, resp);
+        return;
+    }
+
+    try {
+        Repuesto e = new Repuesto();
+        e.setNombreRepuesto(nombre.trim());
+        e.setCantidad(Integer.parseInt(cantidadStr.trim()));
+        e.setPrecio(Double.parseDouble(precioStr.trim()));
+        e.setFuePedido("Si".equals(pedido));
+        detalle.getRepuesto().add(e);
+
+    } catch (NumberFormatException ex) {
+        req.setAttribute("errorMsg", "Cantidad o precio inválidos. Deben ser números.");
+        req.getRequestDispatcher("/gestionDetalles.jsp").forward(req, resp);
+        return;
+    }
+
+} else {
+    // Campos servicio
+    String descripcion = req.getParameter("servicioRequerido");
+    String precioStr = req.getParameter("precioServicio");
+    String costoManoObraStr = req.getParameter("costoManoObra");
+
+    if (descripcion == null || descripcion.trim().isEmpty() ||
+        precioStr == null || precioStr.trim().isEmpty() ||
+        costoManoObraStr == null || costoManoObraStr.trim().isEmpty()) {
+
+        req.setAttribute("errorMsg", "Todos los campos de servicio son obligatorios.");
+        req.getRequestDispatcher("/gestionDetalles.jsp").forward(req, resp);
+        return;
+    }
+
+    try {
+        Servicio s = new Servicio();
+        s.setDescripcion(descripcion.trim());
+        s.setPrecio(Double.parseDouble(precioStr.trim()));
+        s.setCostoManoObra(Double.parseDouble(costoManoObraStr.trim()));
+        detalle.getServicio().add(s);
+
+    } catch (NumberFormatException ex) {
+        req.setAttribute("errorMsg", "Precio o costo mano de obra inválidos. Deben ser números.");
+        req.getRequestDispatcher("/gestionDetalles.jsp").forward(req, resp);
+        return;
+    }
+}
         try {
             // Insertar en el XML
-            DetalleXmlData data = new DetalleXmlData(rutaDetallesXML);
+            //DetalleXmlData.abrirDocumento(rutaDetallesXML);
             data.insertarDetalle(detalle);
             
             // Redirigir o forward al JSP de confirmación/listado

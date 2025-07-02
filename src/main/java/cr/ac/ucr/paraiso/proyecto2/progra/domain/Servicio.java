@@ -4,6 +4,8 @@
  */
 package cr.ac.ucr.paraiso.proyecto2.progra.domain;
 
+import java.util.Objects;
+
 
 /**
  *
@@ -56,5 +58,36 @@ public class Servicio {
                 precio + ", costoManoObra=" + 
                 costoManoObra + '}';
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 71 * hash + Objects.hashCode(this.descripcion);
+        hash = 71 * hash + (int) (Double.doubleToLongBits(this.precio) ^ (Double.doubleToLongBits(this.precio) >>> 32));
+        hash = 71 * hash + (int) (Double.doubleToLongBits(this.costoManoObra) ^ (Double.doubleToLongBits(this.costoManoObra) >>> 32));
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Servicio other = (Servicio) obj;
+        if (Double.doubleToLongBits(this.precio) != Double.doubleToLongBits(other.precio)) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.costoManoObra) != Double.doubleToLongBits(other.costoManoObra)) {
+            return false;
+        }
+        return Objects.equals(this.descripcion, other.descripcion);
+    }
+    
     
 }

@@ -4,6 +4,8 @@
  */
 package cr.ac.ucr.paraiso.proyecto2.progra.domain;
 
+import java.util.Objects;
+
 /**
  *
  * @author fabia 
@@ -60,6 +62,40 @@ public class Repuesto {
     @Override
     public String toString() {
         return "Repuesto{" + "cantidad=" + cantidad + ", nombreRepuesto=" + nombreRepuesto + ", precio=" + precio + ", fuePedido=" + fuePedido + '}';
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 89 * hash + this.cantidad;
+        hash = 89 * hash + Objects.hashCode(this.nombreRepuesto);
+        hash = 89 * hash + (int) (Double.doubleToLongBits(this.precio) ^ (Double.doubleToLongBits(this.precio) >>> 32));
+        hash = 89 * hash + (this.fuePedido ? 1 : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Repuesto other = (Repuesto) obj;
+        if (this.cantidad != other.cantidad) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.precio) != Double.doubleToLongBits(other.precio)) {
+            return false;
+        }
+        if (this.fuePedido != other.fuePedido) {
+            return false;
+        }
+        return Objects.equals(this.nombreRepuesto, other.nombreRepuesto);
     }
     
     

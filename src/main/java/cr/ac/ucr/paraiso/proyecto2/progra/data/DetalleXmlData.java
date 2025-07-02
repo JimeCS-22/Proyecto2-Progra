@@ -62,7 +62,6 @@ public class DetalleXmlData {
             return new DetalleXmlData(rutaDocumento);
 
         }else return new DetalleXmlData(rutaDocumento,"clientes");
-
     }
 
     private void guardar() throws FileNotFoundException, IOException{

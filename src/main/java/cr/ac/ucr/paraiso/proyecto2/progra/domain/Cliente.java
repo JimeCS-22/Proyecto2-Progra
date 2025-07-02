@@ -4,6 +4,8 @@
  */
 package cr.ac.ucr.paraiso.proyecto2.progra.domain;
 
+import java.util.Objects;
+
 /**
  * @author Camila
  * Cliente del taller 
@@ -66,6 +68,44 @@ public class Cliente {
 
     public void setDireccion(String direccion) {
         this.direccion = direccion;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 19 * hash + Objects.hashCode(this.idCliente);
+        hash = 19 * hash + Objects.hashCode(this.nombre);
+        hash = 19 * hash + Objects.hashCode(this.telefono);
+        hash = 19 * hash + Objects.hashCode(this.celular);
+        hash = 19 * hash + Objects.hashCode(this.direccion);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Cliente other = (Cliente) obj;
+        if (!Objects.equals(this.idCliente, other.idCliente)) {
+            return false;
+        }
+        if (!Objects.equals(this.nombre, other.nombre)) {
+            return false;
+        }
+        if (!Objects.equals(this.telefono, other.telefono)) {
+            return false;
+        }
+        if (!Objects.equals(this.celular, other.celular)) {
+            return false;
+        }
+        return Objects.equals(this.direccion, other.direccion);
     }
     
     
